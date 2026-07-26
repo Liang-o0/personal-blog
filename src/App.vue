@@ -1,5 +1,10 @@
 <template>
   <div class="relative min-h-screen overflow-hidden">
+    <!-- 模糊背景图层 -->
+    <div
+      class="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat opacity-40 blur-[25px] scale-[1.08] transition-opacity duration-300 dark:opacity-25"
+      :style="{ backgroundImage: `url(${backgroundImage})` }"
+    />
     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.12),_transparent_36%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.1),_transparent_32%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.12),_transparent_32%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.1),_transparent_30%)]" />
     <div class="pointer-events-none absolute -left-28 top-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl dark:bg-cyan-500/20" />
     <div class="pointer-events-none absolute -right-24 top-[28rem] h-80 w-80 rounded-full bg-violet-500/20 blur-3xl dark:bg-violet-500/20" />
@@ -16,4 +21,5 @@
 <script setup>
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
+import backgroundImage from './assets/images.jpg'
 </script>

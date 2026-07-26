@@ -5,39 +5,13 @@
 
 html {
   scroll-behavior: smooth;
-  @apply bg-slate-50 dark:bg-slate-950;
 }
 
 body {
   min-height: 100vh;
-  @apply transition-colors duration-300 text-slate-900 dark:text-slate-50 antialiased;
+  @apply transition-colors duration-300 bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 antialiased;
   font-family: 'Plus Jakarta Sans', 'PingFang SC', sans-serif;
   position: relative;
-}
-
-/* 网页模糊背景图层 */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  background-image: url('./images.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.2; /* 默认 40% 透明度 */
-  filter: blur(25px); /* 模糊滤镜，数值越大越模糊 */
-  pointer-events: none; /* 防止遮挡鼠标点击事件 */
-  transform: scale(1.08); /* 略微放大以消除四周模糊边缘产生的白边 */
-  transition: opacity 0.3s ease;
-}
-
-/* 深色模式下降低背景亮度，保证文字清晰度 */
-.dark body::before {
-  opacity: 0.25;
 }
 
 
