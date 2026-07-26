@@ -12,9 +12,9 @@
         </div>
 
         <div class="space-y-4">
-          <h1 class="max-w-3xl text-balance text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl dark:text-white">
-            Welcome to my blog! Nice to meet you here!
-          </h1>
+          <h2 class="max-w-3xl text-balance text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl dark:text-white">
+            Welcome to my blog!<br> Nice to meet you here!
+          </h2>
           <p class="max-w-2xl text-balance text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
             这是我的个人博客，部署在 Cloudflare Pages.
           </p>
@@ -70,7 +70,7 @@
 
               <div class="grid gap-3 sm:grid-cols-2">
                 <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p class="text-xs uppercase tracking-[0.3em] text-cyan-300/70">Hobbies</p>
+                  <p class="text-xs uppercase tracking-[0.3em] text-cyan-300/70">My Hobbies</p>
                   <p class="mt-2 text-sm leading-7 text-slate-200">
                     Singing, daydreaming, playing the piano, and playing badminton
                   </p>

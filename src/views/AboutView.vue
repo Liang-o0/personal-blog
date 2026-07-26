@@ -61,7 +61,7 @@
 
       <div class="glass-card rounded-[1.75rem] p-6">
         <p class="text-xs font-semibold uppercase tracking-[0.35em] text-violet-600 dark:text-violet-400">如何联系我呢</p>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">联系方式[狗头]</h2>
+        <h3 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">联系方式[狗头]</h3>
         <div class="mt-5 grid gap-3 sm:grid-cols-2">
           <div
             v-for="item in principles"
