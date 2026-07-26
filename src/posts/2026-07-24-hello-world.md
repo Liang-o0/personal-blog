@@ -21,4 +21,4 @@ const welcome = "Hello, World!";
 console.log(welcome);
 ```
 
-希望以后能在这里分享更多有趣的代码和日常！
+希望以后能在这里分享更多有趣的日常！

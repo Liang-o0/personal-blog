@@ -21,18 +21,14 @@
         </div>
 
         <div class="flex flex-wrap gap-3">
-          <a
+          <InteractiveHoverButton
             href="#latest"
-            class="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-cyan-600 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-300"
-          >
-            浏览最新文章
-          </a>
-          <router-link
+            text="浏览最新文章"
+          />
+          <InteractiveHoverButton
             to="/about"
-            class="inline-flex items-center justify-center rounded-full border border-slate-200/80 bg-white/70 px-5 py-3 text-sm font-medium text-slate-700 transition-colors duration-300 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:text-cyan-300"
-          >
-            认识作者
-          </router-link>
+            text="认识作者"
+          />
         </div>
 
         <div class="grid gap-3 sm:grid-cols-3">
@@ -301,18 +297,14 @@
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
-          <router-link
+          <InteractiveHoverButton
             to="/about"
-            class="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5 hover:bg-cyan-600 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-300"
-          >
-            查看完整介绍
-          </router-link>
-          <router-link
+            text="查看完整介绍"
+          />
+          <InteractiveHoverButton
             to="/"
-            class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-medium text-slate-700 transition-colors duration-300 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:text-cyan-300"
-          >
-            返回首页顶部
-          </router-link>
+            text="返回首页顶部"
+          />
         </div>
       </div>
     </section>
@@ -323,6 +315,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import fm from 'front-matter'
 import heroImage from '../assets/hero.png'
+import InteractiveHoverButton from '../components/ui/InteractiveHoverButton.vue'
 
 const posts = ref([])
 const loading = ref(true)

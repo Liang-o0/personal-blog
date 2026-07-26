@@ -74,18 +74,14 @@
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
-          <router-link
+          <InteractiveHoverButton
             to="/"
-            class="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5 hover:bg-cyan-600 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-300"
-          >
-            回到首页
-          </router-link>
-          <router-link
+            text="回到首页"
+          />
+          <InteractiveHoverButton
             to="/"
-            class="inline-flex items-center justify-center rounded-full border border-slate-200/70 bg-white/70 px-5 py-3 text-sm font-medium text-slate-700 transition-colors duration-300 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:text-cyan-300"
-          >
-            看最新文章
-          </router-link>
+            text="看最新文章"
+          />
         </div>
       </div>
     </section>
@@ -95,6 +91,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import heroImage from '../assets/hero.png'
+import InteractiveHoverButton from '../components/ui/InteractiveHoverButton.vue'
 
 const badges = ['前端工程', '界面细节', '内容组织', '静态部署']
 
