@@ -3,10 +3,10 @@
     <div class="glass-card flex items-center justify-between rounded-[1.5rem] px-4 py-3 sm:px-5">
       <router-link to="/" class="group flex items-center gap-3">
         <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-cyan-500 via-sky-500 to-violet-500 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
-          P
+          L
         </span>
         <div class="hidden sm:block">
-          <div class="text-sm font-semibold tracking-tight text-slate-950 dark:text-white">PWL Journal</div>
+          <div class="text-sm font-semibold tracking-tight text-slate-950 dark:text-white">britliang Journal</div>
           <div class="text-xs text-slate-500 dark:text-slate-400">hello its my personal Blog</div>
         </div>
       </router-link>

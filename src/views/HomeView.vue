@@ -13,21 +13,21 @@
 
         <div class="space-y-4">
           <h1 class="max-w-3xl text-balance text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl dark:text-white">
-            简洁、高级、克制的个人博客主页
+            Welcome to my blog! Nice to meet you here!
           </h1>
           <p class="max-w-2xl text-balance text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
-            把文章、精选内容、主题索引和作者介绍组织成一套更完整的信息架构，同时保留静态站点的轻快和可维护性。
+            这是我的个人博客，部署在 Cloudflare Pages.
           </p>
         </div>
 
         <div class="flex flex-wrap gap-3">
           <InteractiveHoverButton
             href="#latest"
-            text="浏览最新文章"
+            text="查看最新文章"
           />
           <InteractiveHoverButton
             to="/about"
-            text="认识作者"
+            text="了解我"
           />
         </div>
 
@@ -70,15 +70,15 @@
 
               <div class="grid gap-3 sm:grid-cols-2">
                 <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p class="text-xs uppercase tracking-[0.3em] text-cyan-300/70">Focus</p>
+                  <p class="text-xs uppercase tracking-[0.3em] text-cyan-300/70">Hobbies</p>
                   <p class="mt-2 text-sm leading-7 text-slate-200">
-                    页面强调排版、留白和轻量动效，适合长期维护的个人写作站。
+                    Singing, daydreaming, playing the piano, and playing badminton
                   </p>
                 </div>
                 <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p class="text-xs uppercase tracking-[0.3em] text-violet-300/70">Stack</p>
                   <p class="mt-2 text-sm leading-7 text-slate-200">
-                    Vue 3 + Vite + Tailwind CSS，保持静态站点的速度与部署简洁。
+                    Vue 3 + Vite + Tailwind CSS
                   </p>
                 </div>
               </div>
@@ -96,7 +96,7 @@
             <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">精选文章</h2>
           </div>
           <span class="text-sm text-slate-500 dark:text-slate-400">
-            {{ filteredPosts.length }} 篇可见
+            {{ filteredPosts.length }} articles available
           </span>
         </div>
 
@@ -120,7 +120,7 @@
             class="rounded-full border border-slate-200/70 bg-white/70 px-3.5 py-2 text-sm text-slate-500 transition-colors duration-300 hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400 dark:hover:text-white"
             @click="activeTopic = '全部'"
           >
-            清除筛选
+            清除过滤
           </button>
         </div>
 
@@ -187,7 +187,7 @@
         </article>
 
         <div v-else class="glass-card rounded-[1.75rem] p-6 text-sm text-slate-500 dark:text-slate-400">
-          暂时没有符合当前筛选条件的文章。
+          No articles available for the current filter.
         </div>
       </div>
 
@@ -258,9 +258,9 @@
     <section class="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]" data-reveal style="--delay: 120ms">
       <div class="glass-card rounded-[1.75rem] p-6">
         <p class="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-600 dark:text-cyan-400">Topics</p>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">主题标签</h2>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">Topics</h2>
         <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-          点击标签可以筛选文章。这个交互会同步更新精选文章和最新列表。
+          Click on a tag to filter articles. This interaction will sync the featured articles and latest list.
         </p>
         <div class="mt-5 flex flex-wrap gap-3">
           <span
@@ -276,19 +276,19 @@
 
       <div class="glass-card rounded-[1.75rem] p-6">
         <p class="text-xs font-semibold uppercase tracking-[0.35em] text-violet-600 dark:text-violet-400">About</p>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">关于这座博客</h2>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">About This Blog</h2>
         <p class="mt-4 max-w-2xl text-balance text-sm leading-8 text-slate-600 dark:text-slate-300">
-          这是一个专注于内容和质感的个人博客模板。它保留了静态站点的轻快，补上更完整的信息架构，让文章、标签和作者介绍在同一屏里都能找到合适的位置。
+          个人的博客小网站，心情好又有时间呢，就多多更新，比较懒，多包含[狗头][狗头]
         </p>
 
         <div class="mt-5 grid gap-3 sm:grid-cols-3">
           <div class="rounded-2xl border border-slate-200/70 bg-white/70 p-4 transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/70">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Speed</p>
-            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">静态加载，响应迅速</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">这里我不知道要写什么，先空着</p>
+            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">这里我不知道要写什么，先空着</p>
           </div>
           <div class="rounded-2xl border border-slate-200/70 bg-white/70 p-4 transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/70">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Motion</p>
-            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">滚动进入，节奏更明确</p>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">这里我不知道要写什么，先空着</p>
+            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">这里我不知道要写什么，先空着</p>
           </div>
           <div class="rounded-2xl border border-slate-200/70 bg-white/70 p-4 transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/70">
             <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Stack</p>
@@ -468,7 +468,7 @@ watch(activeTopic, () => {
 })
 
 onMounted(() => {
-  document.title = 'PWL Journal · 简洁高级的个人博客'
+  document.title = 'PWL Journal '
   setupRevealObserver()
 
   loadPosts()
