@@ -1,7 +1,7 @@
 ---
-title: Hello World! 我的博客开通了
-date: 2026-07-24
-tags: ["随笔", "生活"]
+title: Hello Nice to meet you!
+date: 2026
+tags: ["随笔", "日记"]
 description: 这是我使用 Vue 3 搭建的静态博客第一篇文章。
 ---
 
