@@ -1,13 +1,5 @@
 <template>
-  <div class="relative min-h-screen overflow-hidden">
-    <!-- 模糊背景图层 -->
-    <div
-      class="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat opacity-40 blur-[25px] scale-[1.08] transition-opacity duration-300 dark:opacity-25"
-      :style="{ backgroundImage: `url(${backgroundImage})` }"
-    />
-    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.12),_transparent_36%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.1),_transparent_32%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.12),_transparent_32%),radial-gradient(circle_at_top_right,_rgba(168,85,247,0.1),_transparent_30%)]" />
-    <div class="pointer-events-none absolute -left-28 top-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl dark:bg-cyan-500/20" />
-    <div class="pointer-events-none absolute -right-24 top-[28rem] h-80 w-80 rounded-full bg-violet-500/20 blur-3xl dark:bg-violet-500/20" />
+  <GlassyBackground>
     <div class="relative z-10 flex min-h-screen flex-col">
       <Navbar />
       <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
@@ -15,11 +7,38 @@
       </main>
       <Footer />
     </div>
-  </div>
+  </GlassyBackground>
 </template>
 
 <script setup>
+import { onMounted, onUnmounted } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
-import backgroundImage from './assets/images.jpg'
+import GlassyBackground from './components/ui/GlassyBackground.vue'
+import Lenis from 'lenis'
+
+let lenis = null
+
+onMounted(() => {
+  // Initialize Lenis smooth scroll
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    syncTouch: true
+  })
+
+  function raf(time) {
+    lenis.raf(time)
+    requestAnimationFrame(raf)
+  }
+
+  requestAnimationFrame(raf)
+})
+
+onUnmounted(() => {
+  if (lenis) {
+    lenis.destroy()
+  }
+})
 </script>

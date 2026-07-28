@@ -1,310 +1,298 @@
 <template>
-  <div class="space-y-12 lg:space-y-16">
-    <section
-      class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]"
+  <div class="space-y-20 pb-20">
+    <!-- Hero / Greeting Section (Asymmetric Bento-style layout) -->
+    <section 
+      class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-stretch"
       data-reveal
-      style="--delay: 0ms"
+      style="--delay: 100ms"
     >
-      <div class="space-y-6">
-        <div class="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-xs font-medium text-slate-600 shadow-sm backdrop-blur dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-300">
-          <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-          Cloudflare Pages / Vue 3 / Markdown
-        </div>
+      <!-- Greeting Card -->
+      <div class="glass-card rounded-[2rem] p-8 md:p-10 flex flex-col justify-between space-y-8 relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+        
+        <div class="space-y-6">
+          <div class="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-1.5 text-xs font-semibold text-primary backdrop-blur">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+            </span>
+            PWL Journal · Built with Vue 3
+          </div>
 
-        <div class="space-y-4">
-          <h2 class="max-w-3xl text-balance text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl dark:text-white">
-            Welcome to my blog!<br> Nice to meet you here!
-          </h2>
-          <p class="max-w-2xl text-balance text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
-            这是我的个人博客，部署在 Cloudflare Pages.
+          <h1 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl lg:text-6xl leading-[1.1]">
+            <TextAnimate text="欢迎来到我的" />
+            <br />
+            <TextAnimate text="精神角落 ✨" class="text-gradient" />
+          </h1>
+          <p class="max-w-xl text-balance text-base leading-relaxed text-muted">
+            你好，我是梁。这里是我的个人博客，记录生活、灵感、代码和日常的奇思妙想。
+            希望你在这里能找到共鸣，哪怕只是一瞬间的启发。
           </p>
         </div>
 
-        <div class="flex flex-wrap gap-3">
-          <InteractiveHoverButton
-            href="#latest"
-            text="查看最新文章"
-          />
-          <InteractiveHoverButton
+        <div class="flex flex-wrap gap-4">
+          <SlideButton
+            text1="了解关于我"
+            text2="LET'S GO ➔"
             to="/about"
-            text="了解我"
           />
-        </div>
-
-        <div class="grid gap-3 sm:grid-cols-3">
-          <div
-            v-for="stat in heroStats"
-            :key="stat.label"
-            class="glass-card rounded-2xl p-4 transition-transform duration-300 hover:-translate-y-1"
-          >
-            <p class="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
-              {{ stat.value }}
-            </p>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              {{ stat.label }}
-            </p>
-          </div>
+          <SlideButton
+            text1="阅读最新文章"
+            text2="GO READ ➔"
+            href="#articles"
+            class="bg-gradient-to-r from-secondary/80 to-accent/80"
+          />
         </div>
       </div>
 
-      <div class="relative" data-reveal style="--delay: 120ms">
-        <div class="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle,_rgba(34,211,238,0.22)_0%,_transparent_68%)] blur-3xl"></div>
-        <div
-          class="group relative overflow-hidden rounded-[2rem] border border-slate-200/70 bg-slate-950 p-5 shadow-[0_35px_120px_-55px_rgba(15,23,42,0.9)] transition-transform duration-500 hover:-translate-y-1 dark:border-white/10 dark:bg-slate-900"
-        >
-          <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),transparent_35%,rgba(168,85,247,0.16))] opacity-80 transition-opacity duration-500 group-hover:opacity-100"></div>
-          <div class="relative space-y-5">
-            <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
-              <span>Visual Archive</span>
-              <span>{{ compactToday }}</span>
-            </div>
+      <!-- Quick Info Card -->
+      <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -left-16 -bottom-16 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+        
+        <div class="space-y-6 relative z-10">
+          <div class="flex items-center justify-between text-xs uppercase tracking-widest text-muted">
+            <span>Visual Archive</span>
+            <span>{{ compactToday }}</span>
+          </div>
 
-            <div class="grid gap-5">
-              <div class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 p-3">
-                <img
-                  :src="heroImage"
-                  alt="博客主页装置插画"
-                  class="mx-auto w-full max-w-sm drop-shadow-[0_32px_48px_rgba(168,85,247,0.35)] transition-transform duration-500 group-hover:scale-[1.03]"
-                />
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="grid h-10 w-10 place-items-center rounded-xl bg-primary/10 text-primary">
+                <iconify-icon icon="lucide:sparkles" class="text-xl"></iconify-icon>
               </div>
-
-              <div class="grid gap-3 sm:grid-cols-2">
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p class="text-xs uppercase tracking-[0.3em] text-cyan-300/70">My Hobbies</p>
-                  <p class="mt-2 text-sm leading-7 text-slate-200">
-                    Singing, daydreaming, playing the piano, and playing badminton
-                  </p>
-                </div>
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p class="text-xs uppercase tracking-[0.3em] text-violet-300/70">Stack</p>
-                  <p class="mt-2 text-sm leading-7 text-slate-200">
-                    Vue 3 + Vite + Tailwind CSS
-                  </p>
-                </div>
+              <div>
+                <p class="text-xs text-muted">目前致力于</p>
+                <p class="text-sm font-semibold text-text">探索前端美学 & AI 智能</p>
               </div>
             </div>
+            
+            <div class="flex items-center gap-3">
+              <div class="grid h-10 w-10 place-items-center rounded-xl bg-secondary/10 text-secondary">
+                <iconify-icon icon="lucide:cpu" class="text-xl"></iconify-icon>
+              </div>
+              <div>
+                <p class="text-xs text-muted">技术栈</p>
+                <p class="text-sm font-semibold text-text">Vue 3 / Vite / Tailwind</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mt-8 pt-6 border-t border-border/40 relative z-10">
+          <div>
+            <p class="text-2xl font-extrabold tracking-tight text-text">{{ posts.length }}</p>
+            <p class="text-xs text-muted">已发布文章</p>
+          </div>
+          <div>
+            <p class="text-2xl font-extrabold tracking-tight text-text">{{ topicCounts.length }}</p>
+            <p class="text-xs text-muted">个分类主题</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]" data-reveal style="--delay: 80ms">
-      <div class="space-y-4">
-        <div class="flex items-end justify-between gap-4">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-600 dark:text-cyan-400">Featured</p>
-            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">精选文章</h2>
+    <!-- Hobbies Section (爱好) -->
+    <section 
+      class="space-y-6"
+      data-reveal
+      style="--delay: 150ms"
+    >
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-primary"><TextAnimate text="My Passions" /></p>
+        <h2 class="mt-1 text-3xl font-bold tracking-tight text-text"><TextAnimate text="爱好与生活" :delay="45" /></h2>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div 
+          v-for="hobby in hobbies" 
+          :key="hobby.title"
+          class="glass-card rounded-2xl p-6 transition-all duration-500 ease-custom hover:-translate-y-2 border border-border/40 hover:border-primary/30 group"
+        >
+          <div class="h-12 w-12 rounded-2xl bg-card border border-border/50 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500 ease-custom">
+            <iconify-icon :icon="hobby.icon" class="text-2xl"></iconify-icon>
           </div>
-          <span class="text-sm text-slate-500 dark:text-slate-400">
-            {{ filteredPosts.length }} articles available
+          <h3 class="mt-4 text-lg font-bold text-text">{{ hobby.title }}</h3>
+          <p class="mt-2 text-sm text-muted leading-relaxed">{{ hobby.description }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Photo Gallery (我喜欢的照片) -->
+    <section 
+      class="space-y-6"
+      data-reveal
+      style="--delay: 200ms"
+    >
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-accent"><TextAnimate text="Visual Moments" /></p>
+        <h2 class="mt-1 text-3xl font-bold tracking-tight text-text"><TextAnimate text="我喜欢的瞬间" :delay="45" /></h2>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div 
+          v-for="(photo, index) in favoritePhotos" 
+          :key="index"
+          class="glass-card rounded-[1.5rem] p-3 group overflow-hidden border border-border/30 hover:border-accent/30 transition-all duration-500 ease-custom"
+        >
+          <div class="overflow-hidden rounded-[1rem] aspect-[4/3] bg-bg relative">
+            <img 
+              :src="photo.url" 
+              :alt="photo.caption" 
+              class="w-full h-full object-cover transition-transform duration-700 ease-custom group-hover:scale-[1.06] group-hover:rotate-1"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-custom flex items-end p-4">
+              <span class="text-xs font-semibold text-white tracking-wide">{{ photo.caption }}</span>
+            </div>
+          </div>
+          <div class="mt-3 px-2 pb-1 flex items-center justify-between">
+            <span class="text-sm font-semibold text-text">{{ photo.title }}</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider text-accent">{{ photo.date }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles Section (个人的文章) -->
+    <section 
+      id="articles"
+      class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]"
+      data-reveal
+      style="--delay: 250ms"
+    >
+      <!-- Articles list -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-primary"><TextAnimate text="Articles" /></p>
+            <h2 class="mt-1 text-3xl font-bold tracking-tight text-text"><TextAnimate text="精选文章" :delay="45" /></h2>
+          </div>
+          <span class="text-xs font-semibold text-muted bg-card px-3 py-1.5 rounded-full border border-border/50">
+            {{ filteredPosts.length }} 篇文章
           </span>
         </div>
 
+        <!-- Filter Tags -->
         <div class="flex flex-wrap gap-2">
           <button
             v-for="topic in topicOptions"
             :key="topic.name"
             type="button"
-            class="rounded-full border px-3.5 py-2 text-sm transition-all duration-300"
+            class="rounded-full border px-4 py-2 text-sm transition-all duration-500 ease-custom"
             :class="topic.name === activeTopic
-              ? 'border-cyan-300 bg-cyan-50 text-cyan-700 shadow-sm dark:border-cyan-400/40 dark:bg-cyan-400/10 dark:text-cyan-300'
-              : 'border-slate-200/70 bg-white/70 text-slate-600 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:text-cyan-300'"
+              ? 'border-primary/50 bg-primary/10 text-primary shadow-sm font-medium'
+              : 'border-border/40 bg-card/50 text-muted hover:-translate-y-0.5 hover:border-primary/30 hover:text-primary'"
             @click="activeTopic = topic.name"
           >
             #{{ topic.name }}
             <span class="ml-1 text-xs opacity-70">({{ topic.count }})</span>
           </button>
-          <button
-            v-if="activeTopic !== '全部'"
-            type="button"
-            class="rounded-full border border-slate-200/70 bg-white/70 px-3.5 py-2 text-sm text-slate-500 transition-colors duration-300 hover:border-slate-300 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400 dark:hover:text-white"
-            @click="activeTopic = '全部'"
-          >
-            清除过滤
-          </button>
         </div>
 
-        <article v-if="loading" class="glass-card rounded-[1.75rem] p-6">
-          <div class="grid gap-5 md:grid-cols-[0.95fr_1.05fr]">
-            <div class="h-56 animate-pulse rounded-[1.5rem] bg-slate-200/70 dark:bg-slate-800/70"></div>
-            <div class="space-y-4 py-2">
-              <div class="h-4 w-32 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-              <div class="h-10 w-4/5 animate-pulse rounded-2xl bg-slate-200/70 dark:bg-slate-800/70"></div>
-              <div class="space-y-3">
-                <div class="h-4 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-                <div class="h-4 w-11/12 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-                <div class="h-4 w-4/5 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article
-          v-else-if="featuredPost"
-          class="group glass-card overflow-hidden rounded-[1.75rem] p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_70px_-35px_rgba(14,165,233,0.35)]"
-        >
-          <div class="grid gap-5 md:grid-cols-[0.95fr_1.05fr]">
-            <div class="overflow-hidden rounded-[1.5rem] bg-slate-950">
-              <img
-                :src="heroImage"
-                :alt="featuredPost.title"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              />
-            </div>
-
-            <div class="flex flex-col justify-between gap-5 p-2 md:p-3">
-              <div class="space-y-4">
-                <div class="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.25em] text-slate-400">
-                  <span>Featured</span>
-                  <span class="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-                  <span>{{ selectedTopicLabel }}</span>
-                </div>
-                <p class="text-sm font-medium text-cyan-600 dark:text-cyan-400">
-                  {{ formatCompactDate(featuredPost.date) }}
-                </p>
-                <router-link
-                  :to="'/post/' + featuredPost.slug"
-                  class="block text-balance text-2xl font-semibold tracking-tight text-slate-950 transition-colors duration-300 hover:text-cyan-600 dark:text-white dark:hover:text-cyan-300 sm:text-3xl"
-                >
-                  {{ featuredPost.title }}
-                </router-link>
-                <p class="max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-300">
-                  {{ featuredPost.description }}
-                </p>
-              </div>
-
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="tag in featuredPost.tags"
-                  :key="tag"
-                  class="rounded-full border border-slate-200/70 bg-white/70 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300"
-                >
-                  #{{ tag }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <div v-else class="glass-card rounded-[1.75rem] p-6 text-sm text-slate-500 dark:text-slate-400">
-          No articles available for the current filter.
-        </div>
-      </div>
-
-      <aside class="space-y-4" id="latest">
-        <div class="flex items-end justify-between gap-4">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-violet-600 dark:text-violet-400">Latest</p>
-            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">最新动态</h2>
-          </div>
-          <span class="text-sm text-slate-500 dark:text-slate-400">{{ recentPosts.length }} 篇</span>
-        </div>
-
-        <div class="space-y-3">
-          <div v-if="loading" class="glass-card rounded-[1.5rem] p-4">
-            <div class="space-y-4">
-              <div class="h-4 w-28 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-              <div class="h-6 w-3/4 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-              <div class="h-4 w-full animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-            </div>
+        <!-- Dynamic Articles loading -->
+        <div class="space-y-4">
+          <div v-if="loading" class="glass-card rounded-3xl p-8 space-y-4">
+            <div class="h-4 w-1/4 animate-pulse rounded bg-border"></div>
+            <div class="h-8 w-3/4 animate-pulse rounded bg-border"></div>
+            <div class="h-4 w-full animate-pulse rounded bg-border"></div>
           </div>
 
-          <template v-else-if="recentPosts.length">
-            <router-link
-              v-for="(post, index) in recentPosts"
+          <template v-else-if="filteredPosts.length">
+            <div 
+              v-for="post in filteredPosts" 
               :key="post.slug"
-              :to="'/post/' + post.slug"
-              class="group scroll-reveal glass-card block rounded-[1.5rem] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/60 hover:shadow-[0_25px_50px_-28px_rgba(14,165,233,0.4)]"
-              :style="{ '--delay': `${index * 90}ms` }"
-              data-reveal
+              class="glass-card rounded-[1.75rem] p-6 hover:shadow-xl transition-all duration-500 ease-custom group border border-border/40 hover:border-primary/20 flex flex-col justify-between"
             >
               <div class="space-y-3">
-                <div class="flex items-start justify-between gap-4">
-                  <p class="text-xs uppercase tracking-[0.3em] text-slate-400">
-                    {{ formatCompactDate(post.date) }}
-                  </p>
-                  <span class="rounded-full border border-slate-200/70 bg-white/60 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400">
-                    Read
-                  </span>
+                <div class="flex items-center justify-between text-xs text-muted">
+                  <span>{{ formatCompactDate(post.date) }}</span>
+                  <div class="flex gap-1.5">
+                    <span 
+                      v-for="tag in post.tags" 
+                      :key="tag"
+                      class="bg-primary/5 text-primary px-2.5 py-0.5 rounded-full text-[10px] font-semibold border border-primary/10"
+                    >
+                      #{{ tag }}
+                    </span>
+                  </div>
                 </div>
 
-                <h3 class="text-lg font-semibold tracking-tight text-slate-950 transition-colors duration-300 group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-300">
+                <router-link 
+                  :to="'/post/' + post.slug"
+                  class="block text-2xl font-bold tracking-tight text-text hover:text-primary transition-colors duration-300"
+                >
                   {{ post.title }}
-                </h3>
-                <p class="line-clamp-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                </router-link>
+                
+                <p class="text-sm text-muted leading-relaxed line-clamp-2">
                   {{ post.description }}
                 </p>
-
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    v-for="tag in post.tags.slice(0, 3)"
-                    :key="tag"
-                    class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-white/5 dark:text-slate-400"
-                  >
-                    #{{ tag }}
-                  </span>
-                </div>
               </div>
-            </router-link>
+
+              <div class="mt-6 flex items-center justify-between pt-4 border-t border-border/30">
+                <router-link 
+                  :to="'/post/' + post.slug"
+                  class="inline-flex items-center gap-1.5 text-sm font-bold text-primary group-hover:gap-2.5 transition-all duration-300 ease-custom"
+                >
+                  阅读全文
+                  <iconify-icon icon="lucide:arrow-right" class="text-xs"></iconify-icon>
+                </router-link>
+              </div>
+            </div>
           </template>
 
-          <div v-else class="glass-card rounded-[1.5rem] p-5 text-sm text-slate-500 dark:text-slate-400">
-            当前筛选没有匹配的文章。切回“全部”可以查看完整列表。
+          <div v-else class="glass-card rounded-3xl p-8 text-center text-muted text-sm">
+            该分类下暂无文章。
           </div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]" data-reveal style="--delay: 120ms">
-      <div class="glass-card rounded-[1.75rem] p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-600 dark:text-cyan-400">Topics</p>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">Topics</h2>
-        <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-          Click on a tag to filter articles. This interaction will sync the featured articles and latest list.
-        </p>
-        <div class="mt-5 flex flex-wrap gap-3">
-          <span
-            v-for="topic in topicOptions.slice(1)"
-            :key="topic.name"
-            class="inline-flex items-center gap-2 rounded-full border border-slate-200/70 bg-white/70 px-4 py-2 text-sm text-slate-600 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300 dark:hover:text-cyan-300"
-          >
-            <span>#{{ topic.name }}</span>
-            <span class="text-xs text-slate-400">({{ topic.count }})</span>
-          </span>
         </div>
       </div>
 
-      <div class="glass-card rounded-[1.75rem] p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-violet-600 dark:text-violet-400">About</p>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">About This Blog</h2>
-        <p class="mt-4 max-w-2xl text-balance text-sm leading-8 text-slate-600 dark:text-slate-300">
-          个人的博客小网站，心情好又有时间呢，就多多更新，比较懒，多包含[狗头][狗头]
-        </p>
-
-        <div class="mt-5 grid gap-3 sm:grid-cols-3">
-          <div class="rounded-2xl border border-slate-200/70 bg-white/70 p-4 transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/70">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">这里我不知道要写什么，先空着</p>
-            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">这里我不知道要写什么，先空着</p>
-          </div>
-          <div class="rounded-2xl border border-slate-200/70 bg-white/70 p-4 transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/70">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">这里我不知道要写什么，先空着</p>
-            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">这里我不知道要写什么，先空着</p>
-          </div>
-          <div class="rounded-2xl border border-slate-200/70 bg-white/70 p-4 transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900/70">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Stack</p>
-            <p class="mt-2 text-sm font-medium text-slate-900 dark:text-white">Vue 3 + Vite + Tailwind</p>
-          </div>
+      <!-- Works / Projects Section (个人的作品) -->
+      <div class="space-y-6">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-secondary"><TextAnimate text="Works" /></p>
+          <h2 class="mt-1 text-3xl font-bold tracking-tight text-text"><TextAnimate text="个人作品" :delay="45" /></h2>
         </div>
 
-        <div class="mt-6 flex flex-wrap gap-3">
-          <InteractiveHoverButton
-            to="/about"
-            text="查看完整介绍"
-          />
-          <InteractiveHoverButton
-            to="/"
-            text="返回首页顶部"
-          />
+        <div class="space-y-4">
+          <div 
+            v-for="project in personalWorks" 
+            :key="project.title"
+            class="glass-card rounded-[1.75rem] p-6 hover:shadow-xl transition-all duration-500 ease-custom border border-border/40 hover:border-secondary/20 flex flex-col justify-between relative overflow-hidden group"
+          >
+            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-colors duration-500"></div>
+            
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="h-10 w-10 rounded-xl bg-card border border-border/50 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-500 ease-custom">
+                  <iconify-icon :icon="project.icon" class="text-xl"></iconify-icon>
+                </div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-secondary">{{ project.status }}</span>
+              </div>
+              
+              <h3 class="text-xl font-bold text-text">{{ project.title }}</h3>
+              <p class="text-xs text-muted leading-relaxed">{{ project.description }}</p>
+            </div>
+
+            <div class="mt-5 flex items-center justify-between">
+              <div class="flex gap-1.5">
+                <span 
+                  v-for="tech in project.technologies" 
+                  :key="tech"
+                  class="bg-secondary/5 text-secondary px-2.5 py-0.5 rounded-full text-[9px] font-semibold border border-secondary/10"
+                >
+                  {{ tech }}
+                </span>
+              </div>
+              <a 
+                :href="project.link" 
+                target="_blank"
+                class="text-xs font-bold text-secondary flex items-center gap-1 hover:gap-1.5 transition-all duration-300"
+              >
+                访问
+                <iconify-icon icon="lucide:external-link" class="text-[10px]"></iconify-icon>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -314,12 +302,92 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import fm from 'front-matter'
-import heroImage from '../assets/hero.png'
-import InteractiveHoverButton from '../components/ui/InteractiveHoverButton.vue'
+import SlideButton from '../components/ui/SlideButton.vue'
+import TextAnimate from '../components/ui/TextAnimate.vue'
 
 const posts = ref([])
 const loading = ref(true)
 const activeTopic = ref('全部')
+
+// Hobbies definitions using Iconify icons
+const hobbies = [
+  {
+    title: '弹钢琴 🎹',
+    icon: 'lucide:music',
+    description: '指尖在黑白键上跳跃，让旋律流淌进清晨与黄昏的静谧里。'
+  },
+  {
+    title: '打羽毛球 🏸',
+    icon: 'lucide:activity',
+    description: '在球场上快速奔跑、挥拍、跳杀，用汗水换来身体的轻盈。'
+  },
+  {
+    title: '音乐歌唱 🎤',
+    icon: 'lucide:mic',
+    description: '唱歌是我的秘密树洞，不管是摇滚还是抒情，都是情绪的宣泄。'
+  },
+  {
+    title: '放空冥想 🧠',
+    icon: 'lucide:brain',
+    description: '给大脑放个短假，在天马行空的白日梦中搜集闪光的灵感。'
+  }
+]
+
+// Personal photos definitions (using Picsum Photos high quality random ids)
+const favoritePhotos = [
+  {
+    title: '海边落日',
+    caption: '落日沉入大海，泛起橘粉色的波光',
+    url: 'https://picsum.photos/id/10/800/600',
+    date: 'SUMMER',
+  },
+  {
+    title: '林间木屋',
+    caption: '晨光穿透林间树梢，照亮安静的小屋',
+    url: 'https://picsum.photos/id/15/800/600',
+    date: 'AUTUMN',
+  },
+  {
+    title: '角落咖啡馆',
+    caption: '午后的一杯拿铁，配上翻开的书页',
+    url: 'https://picsum.photos/id/30/800/600',
+    date: 'WINTER',
+  },
+  {
+    title: '山野夜空',
+    caption: '无垠的银河繁星，在大地之上闪烁',
+    url: 'https://picsum.photos/id/42/800/600',
+    date: 'SPRING',
+  }
+]
+
+// Personal works/projects definitions using Iconify icons
+const personalWorks = [
+  {
+    title: 'PWL Space',
+    icon: 'lucide:layout-template',
+    description: '一个完全基于玻璃拟态 (Glassmorphism) 风格设计的个人灵感面板，探索极简与华丽视觉的交界。',
+    status: 'ACTIVE',
+    technologies: ['Vue 3', 'Tailwind', 'Anime.js'],
+    link: '#'
+  },
+  {
+    title: 'Vibe Ambient',
+    icon: 'lucide:radio',
+    description: '专为工作和冥想设计的轻量网页端白噪音播放器，支持混音与动态渐变微光背景。',
+    status: 'COMPLETED',
+    technologies: ['HTML5 Audio', 'Vue 3'],
+    link: '#'
+  },
+  {
+    title: 'Mind Node',
+    icon: 'lucide:git-fork',
+    description: '一个极简的本地脑图草稿板，用最少的操作快速沉淀思维链路，支持导出与云存储。',
+    status: 'DESIGN',
+    technologies: ['SVG', 'TypeScript'],
+    link: '#'
+  }
+]
 
 const compactDateFormatter = new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric',
@@ -328,52 +396,47 @@ const compactDateFormatter = new Intl.DateTimeFormat('zh-CN', {
 })
 
 const formatCompactDate = (value) => {
-  if (!value) {
-    return '--'
-  }
-
+  if (!value) return '--'
   const parsed = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(parsed.getTime())) {
-    return value
-  }
-
+  if (Number.isNaN(parsed.getTime())) return value
   return compactDateFormatter.format(parsed).replace(/\//g, '.')
 }
 
 const loadPosts = async () => {
   loading.value = true
+  try {
+    const files = import.meta.glob('/src/posts/*.md', { query: '?raw', import: 'default' })
+    const list = await Promise.all(
+      Object.entries(files).map(async ([path, load]) => {
+        const slug = path.split('/').pop().replace('.md', '')
+        const content = await load()
+        const parsed = fm(content)
+        const tags = Array.isArray(parsed.attributes.tags) ? parsed.attributes.tags : []
 
-  const files = import.meta.glob('/src/posts/*.md', { query: '?raw', import: 'default' })
-  const list = await Promise.all(
-    Object.entries(files).map(async ([path, load]) => {
-      const slug = path.split('/').pop().replace('.md', '')
-      const content = await load()
-      const parsed = fm(content)
-      const tags = Array.isArray(parsed.attributes.tags) ? parsed.attributes.tags : []
-
-      return {
-        slug,
-        title: parsed.attributes.title || '未命名文章',
-        date: parsed.attributes.date ? new Date(parsed.attributes.date).toISOString().split('T')[0] : '',
-        tags,
-        description: parsed.attributes.description || '',
-      }
-    }),
-  )
-
-  posts.value = list.sort((a, b) => new Date(b.date) - new Date(a.date))
-  loading.value = false
+        return {
+          slug,
+          title: parsed.attributes.title || '未命名文章',
+          date: parsed.attributes.date ? new Date(parsed.attributes.date).toISOString().split('T')[0] : '',
+          tags,
+          description: parsed.attributes.description || '',
+        }
+      })
+    )
+    posts.value = list.sort((a, b) => new Date(b.date) - new Date(a.date))
+  } catch (err) {
+    console.error('Failed to load posts', err)
+  } finally {
+    loading.value = false
+  }
 }
 
 const topicCounts = computed(() => {
   const counts = new Map()
-
   posts.value.forEach((post) => {
     post.tags.forEach((tag) => {
       counts.set(tag, (counts.get(tag) || 0) + 1)
     })
   })
-
   return [...counts.entries()]
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
@@ -388,49 +451,20 @@ const filteredPosts = computed(() => {
   if (activeTopic.value === '全部') {
     return posts.value
   }
-
   return posts.value.filter((post) => post.tags.includes(activeTopic.value))
 })
 
-const featuredPost = computed(() => filteredPosts.value[0] ?? posts.value[0] ?? null)
-const recentPosts = computed(() => {
-  const source = filteredPosts.value
-  return source.slice(featuredPost.value ? 1 : 0, 5)
-})
-
-const heroStats = computed(() => [
-  {
-    value: String(posts.value.length).padStart(2, '0'),
-    label: '篇文章',
-  },
-  {
-    value: String(topicCounts.value.length).padStart(2, '0'),
-    label: '个主题',
-  },
-  {
-    value: featuredPost.value ? formatCompactDate(featuredPost.value.date) : '--',
-    label: '最近更新',
-  },
-])
-
-const selectedTopicLabel = computed(() => (activeTopic.value === '全部' ? '全站内容' : `#${activeTopic.value}`))
 const compactToday = computed(() => formatCompactDate(new Date()))
 
+// Reveal Observer setup
 const observer = ref(null)
 const observedElements = new WeakSet()
 
 const registerRevealTargets = async () => {
   await nextTick()
-
-  if (!observer.value) {
-    return
-  }
-
+  if (!observer.value) return
   document.querySelectorAll('[data-reveal]').forEach((element) => {
-    if (observedElements.has(element)) {
-      return
-    }
-
+    if (observedElements.has(element)) return
     observedElements.add(element)
     observer.value.observe(element)
   })
@@ -440,37 +474,29 @@ const setupRevealObserver = () => {
   observer.value = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return
-        }
-
+        if (!entry.isIntersecting) return
         entry.target.classList.add('is-visible')
         observer.value?.unobserve(entry.target)
       })
     },
     {
-      threshold: 0.18,
-      rootMargin: '0px 0px -8% 0px',
-    },
+      threshold: 0.1,
+      rootMargin: '0px 0px -5% 0px',
+    }
   )
 }
 
 watch(posts, () => {
-  registerRevealTargets().catch((error) => {
-    console.error(error)
-  })
+  registerRevealTargets()
 })
 
 watch(activeTopic, () => {
-  registerRevealTargets().catch((error) => {
-    console.error(error)
-  })
+  registerRevealTargets()
 })
 
 onMounted(() => {
   document.title = 'PWL Journal '
   setupRevealObserver()
-
   loadPosts()
     .then(() => registerRevealTargets())
     .catch((error) => {
@@ -483,3 +509,12 @@ onBeforeUnmount(() => {
   observer.value?.disconnect()
 })
 </script>
+
+<style scoped>
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+}
+</style>

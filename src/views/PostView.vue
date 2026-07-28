@@ -1,43 +1,40 @@
 <template>
-  <div class="mx-auto max-w-4xl space-y-6">
+  <div class="mx-auto max-w-4xl space-y-6 pb-20">
     <router-link
       to="/"
-      class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-cyan-600 dark:text-slate-400 dark:hover:text-cyan-300"
+      class="inline-flex items-center gap-2 text-sm font-semibold text-muted transition-colors duration-300 hover:text-primary"
     >
-      <span aria-hidden="true">←</span>
+      <iconify-icon icon="lucide:arrow-left" class="text-xs"></iconify-icon>
       返回首页
     </router-link>
 
-    <div v-if="loading" class="glass-card rounded-[1.75rem] p-8">
-      <div class="space-y-5">
-        <div class="h-4 w-32 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-        <div class="h-12 w-4/5 animate-pulse rounded-2xl bg-slate-200/70 dark:bg-slate-800/70"></div>
-        <div class="h-4 w-11/12 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-        <div class="h-4 w-3/4 animate-pulse rounded-full bg-slate-200/70 dark:bg-slate-800/70"></div>
-      </div>
+    <div v-if="loading" class="glass-card rounded-[1.75rem] p-8 space-y-4">
+      <div class="h-4 w-32 animate-pulse rounded bg-border"></div>
+      <div class="h-10 w-4/5 animate-pulse rounded bg-border"></div>
+      <div class="h-4 w-full animate-pulse rounded bg-border"></div>
     </div>
 
-    <div v-else-if="errorMessage" class="glass-card rounded-[1.75rem] p-8">
-      <p class="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-600 dark:text-cyan-400">404</p>
-      <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">文章未找到</h1>
-      <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300">{{ errorMessage }}</p>
+    <div v-else-if="errorMessage" class="glass-card rounded-[1.75rem] p-8 space-y-3">
+      <p class="text-xs font-bold uppercase tracking-widest text-primary">404</p>
+      <h1 class="text-3xl font-extrabold tracking-tight text-text"><TextAnimate text="文章未找到" /></h1>
+      <p class="text-sm leading-relaxed text-muted">{{ errorMessage }}</p>
     </div>
 
     <article v-else-if="post" class="space-y-8">
       <header class="glass-card overflow-hidden rounded-[1.75rem]">
         <div class="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
           <div class="space-y-5">
-            <div class="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+            <div class="flex flex-wrap items-center gap-3 text-xs text-muted">
               <span>{{ formattedDate }}</span>
-              <span class="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+              <span class="h-1 w-1 rounded-full bg-border"></span>
               <span>Markdown Article</span>
             </div>
 
-            <h1 class="text-balance text-4xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-5xl">
-              {{ post.title }}
+            <h1 class="text-balance text-3xl font-extrabold tracking-tight text-text sm:text-4xl leading-[1.2]">
+              <TextAnimate v-if="post?.title" :text="post.title" />
             </h1>
 
-            <p v-if="post.description" class="max-w-2xl text-balance text-base leading-8 text-slate-600 dark:text-slate-300">
+            <p v-if="post.description" class="text-balance text-sm leading-relaxed text-muted">
               {{ post.description }}
             </p>
 
@@ -45,27 +42,27 @@
               <span
                 v-for="tag in post.tags"
                 :key="tag"
-                class="rounded-full border border-slate-200/70 bg-white/70 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-300"
+                class="rounded-full border border-border bg-card/60 px-3.5 py-1 text-xs font-semibold text-text"
               >
                 #{{ tag }}
               </span>
             </div>
           </div>
 
-          <div class="overflow-hidden rounded-[1.5rem] border border-slate-200/70 bg-slate-950 p-4 dark:border-white/10 dark:bg-slate-900">
+          <div class="overflow-hidden rounded-[1.5rem] bg-card/85 p-4 border border-border/40 relative">
             <img
               :src="heroImage"
               :alt="post.title"
-              class="w-full rounded-[1.25rem] object-cover drop-shadow-[0_20px_40px_rgba(168,85,247,0.2)]"
+              class="w-full rounded-[1.25rem] object-cover drop-shadow-[0_20px_40px_rgba(var(--primary),0.1)]"
             />
             <div class="mt-4 grid gap-3 sm:grid-cols-2">
-              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p class="text-xs uppercase tracking-[0.3em] text-cyan-300/70">Format</p>
-                <p class="mt-2 text-sm leading-7 text-slate-200">Markdown 渲染，兼容静态发布。</p>
+              <div class="rounded-2xl border border-border/30 bg-bg/40 p-4">
+                <p class="text-[10px] uppercase font-bold tracking-widest text-primary">Format</p>
+                <p class="mt-1.5 text-xs leading-relaxed text-text">Markdown 渲染，兼容静态发布。</p>
               </div>
-              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p class="text-xs uppercase tracking-[0.3em] text-violet-300/70">Read</p>
-                <p class="mt-2 text-sm leading-7 text-slate-200">排版拉开层次，阅读更轻松。</p>
+              <div class="rounded-2xl border border-border/30 bg-bg/40 p-4">
+                <p class="text-[10px] uppercase font-bold tracking-widest text-secondary">Read</p>
+                <p class="mt-1.5 text-xs leading-relaxed text-text">排版拉开层次，阅读更轻松。</p>
               </div>
             </div>
           </div>
@@ -74,7 +71,7 @@
 
       <div class="glass-card rounded-[1.75rem] p-6 sm:p-8">
         <article
-          class="prose prose-slate max-w-none dark:prose-invert prose-headings:tracking-tight prose-headings:text-slate-950 dark:prose-headings:text-white prose-a:text-cyan-600 dark:prose-a:text-cyan-400 prose-strong:text-slate-900 dark:prose-strong:text-white prose-code:rounded-md prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-normal dark:prose-code:bg-white/10"
+          class="prose max-w-none dark:prose-invert prose-headings:tracking-tight prose-headings:text-text prose-a:text-primary hover:prose-a:opacity-85 prose-strong:text-text prose-code:rounded-md prose-code:bg-card prose-code:border prose-code:border-border/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none dark:prose-pre:bg-card/40 dark:prose-pre:border dark:prose-pre:border-border/30"
           v-html="renderedContent"
         ></article>
       </div>
@@ -88,6 +85,7 @@ import { useRoute } from 'vue-router'
 import fm from 'front-matter'
 import { marked } from 'marked'
 import heroImage from '../assets/hero.png'
+import TextAnimate from '../components/ui/TextAnimate.vue'
 
 const route = useRoute()
 const post = ref(null)
@@ -104,28 +102,19 @@ const renderedContent = computed(() => {
 })
 
 const formattedDate = computed(() => {
-  if (!post.value?.date) {
-    return ''
-  }
-
+  if (!post.value?.date) return ''
   const parsed = new Date(post.value.date)
-  if (Number.isNaN(parsed.getTime())) {
-    return post.value.date
-  }
-
+  if (Number.isNaN(parsed.getTime())) return post.value.date
   return new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  })
-    .format(parsed)
-    .replace(/\//g, '.')
+  }).format(parsed).replace(/\//g, '.')
 })
 
 const loadPost = async () => {
   loading.value = true
   errorMessage.value = ''
-
   const slug = route.params.slug
 
   try {
