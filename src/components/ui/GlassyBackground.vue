@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen w-full overflow-hidden bg-bg text-text transition-colors duration-500 ease-custom">
+  <div class="relative min-h-screen w-full overflow-hidden text-text transition-colors duration-500 ease-custom">
     <!-- Animated glassy background background layer -->
     <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
       <!-- Base gradient moving background -->

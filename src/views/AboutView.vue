@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto max-w-5xl space-y-12 pb-20">
     <!-- Header Story Card (Asymmetric) -->
-    <section class="glass-card overflow-hidden rounded-[2rem] border border-border/40">
+    <section class="glass-card-custom overflow-hidden rounded-[2rem] border border-border/40">
       <div class="grid gap-8 p-8 md:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div class="space-y-6">
           <p class="text-xs font-bold uppercase tracking-widest text-primary"><TextAnimate text="The Blogger" /></p>
           <h1 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl leading-[1.15]">
-            <TextAnimate text="你好，我是梁 ——" />
+            <TextAnimate text="你好，我是liang ——" />
             <br />
-            <TextAnimate text="欢迎来到我的虚拟营地。" :delay="35" />
+            <TextAnimate text="欢迎来到我的 Personal Blog." :delay="35" />
           </h1>
           <p class="text-base leading-relaxed text-muted">
             这是一个用来安放文字、代码和瞬间的地方。我喜欢用文字把思绪固定，用代码把想象变为现实，用镜头把美好的瞬间留存。
@@ -39,7 +39,7 @@
     <!-- Asymmetric grid for "Thoughts" & "Contact details" -->
     <section class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
       <!-- Left Column: Thoughts and Gratitude (我想说的一些话 & 感谢) -->
-      <div class="glass-card rounded-[2rem] p-8 md:p-10 space-y-8 border border-border/40">
+      <div class="glass-card-custom rounded-[2rem] p-8 md:p-10 space-y-8 border border-border/40">
         <div class="space-y-4">
           <p class="text-xs font-bold uppercase tracking-widest text-primary"><TextAnimate text="Thoughts & Thanks" /></p>
           <h2 class="text-3xl font-extrabold tracking-tight text-text"><TextAnimate text="见字如面，我想说的一些话" :delay="40" /></h2>
@@ -74,7 +74,7 @@
               真诚的谢意
             </h3>
             <p>
-              感谢那些一直在身边支持我探索新事物的朋友们，你们的鼓励是我不断打破边界的勇气。
+              感谢那些一直在身边引导我探索新事物的朋友们，
               同时，也感谢那些在开源世界中无私分享知识与灵感的创造者们，是你们做出的优秀工具让这个博客的每一像素都变得更加灵动。
             </p>
           </div>
@@ -82,7 +82,7 @@
       </div>
 
       <!-- Right Column: Contact Details (联系方式) -->
-      <div class="glass-card rounded-[2rem] p-8 space-y-8 border border-border/40 flex flex-col justify-between">
+      <div class="glass-card-custom rounded-[2rem] p-8 space-y-8 border border-border/40 flex flex-col justify-between">
         <div class="space-y-6">
           <div class="space-y-2">
             <p class="text-xs font-bold uppercase tracking-widest text-secondary"><TextAnimate text="Get in Touch" /></p>
@@ -116,7 +116,7 @@
             text1="阅读精选文章"
             text2="READ POSTS ➔"
             to="/#articles"
-            class="bg-gradient-to-r from-secondary/80 to-accent/80"
+            class="bg-gradient-to-r from-secondary/80 to-[#fa5c15]/80"
           />
         </div>
       </div>
@@ -134,12 +134,12 @@ const badges = ['Brave', 'Confident', 'Positive', 'Kindness']
 
 const contacts = [
   {
-    platform: '谷歌邮箱 (Gmail)',
+    platform: 'Google Mail',
     icon: 'lucide:mail',
     value: 'wenlianpu63@gmail.com'
   },
   {
-    platform: '腾讯邮箱 (QQ Mail)',
+    platform: 'QQ Mail',
     icon: 'lucide:message-square',
     value: '1804125721@qq.com'
   },

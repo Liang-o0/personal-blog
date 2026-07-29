@@ -5,7 +5,8 @@
 :root {
   --primary: 187 88% 35%;
   --secondary: 142 60% 45%;
-  --accent: 24 95% 55%;
+  --accent: 352 78% 66%; /* HSL values of #EC6476 */
+  --accent-gradient: linear-gradient(135deg, #EC6476, #111D68);
   --bg: 210 40% 98%;
   --card: 255 255 255;
   --text: 215 25% 12%;
@@ -14,9 +15,11 @@
 }
 
 .dark {
-  --primary: 190 90% 45%;
-  --secondary: 150 65% 45%;
-  --accent: 24 95% 60%;
+  --primary: 190 90% 45%;/*这是什么颜色
+   */
+  --secondary: 150 65% 45%;/* */
+  --accent: 355 80% 67%; /* HSL values of #EF6873 */
+  --accent-gradient: linear-gradient(135deg, #EF6873, #114468);
   --bg: 0 0% 0%; /* Pure black for night mode */
   --card: 0 0% 0%; /* Pure black for night mode cards */
   --text: 210 20% 96%;
@@ -44,9 +47,25 @@ html.lenis, html.lenis body {
 body {
   min-height: 100vh;
   @apply transition-colors duration-500 bg-bg text-text antialiased;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: "Plus Jakarta Sans" ,-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   position: relative;
+
+/*  添加背景图片，从本地导入*/
+  background-image: url('./pexels-kienvirak.jpg'); /* 替换成你在 public 文件夹下的图片名 */
+  background-size: cover;              /* 核心：让图片等比例缩放撑满屏幕，不拉伸变形 */
+  background-position: center;         /* 图片居中对齐 */
+  background-repeat: no-repeat;        /* 图片不重复平铺 */
+  background-attachment: fixed;        /* 可选：视差固定效果，页面滚动时背景图保持不动 */
 }
+
+/* 暗黑模式下的 body 背景优化 */
+.dark body {
+  /* 在背景图上方叠加一层 75% 不透明度的纯黑色，起到压暗背景、突出前台文字的效果 */
+  background-image:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+          url('./pexels-kienvirak.jpg');
+}
+
 
 ::selection {
   background: hsl(var(--primary) / 0.25);
@@ -112,6 +131,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .bg-accent-gradient {
+    background: var(--accent-gradient);
+  }
+
+  .text-accent-gradient {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+  }
 }
 
 /* Glassy background animations using premium beziers instead of standard ease-in-out */
@@ -154,3 +185,80 @@ body {
     transition: none;
   }
 }
+
+/* 1. 亮色模式（默认）下的自定义玻璃卡片样式（删除了固定宽高，由内容或网格容器决定大小） */
+.glass-card-custom {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+          inset 0 0 0px 0px rgba(255, 255, 255, 0); /* 修正了不透明度，展示磨砂效果 */
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* 平滑过渡效果 */
+}
+
+/* 亮色模式：顶部和左侧边缘发光线 */
+.glass-card-custom::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.8),
+          transparent
+  );
+}
+.glass-card-custom::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.8),
+          transparent,
+          rgba(255, 255, 255, 0.3)
+  );
+}
+
+/* 2. 暗黑模式（Dark Mode）适配：使用更深邃的背景和微弱的发光边缘 */
+.dark .glass-card-custom {
+  background: rgba(0, 0, 0, 0.65); /* 暗黑模式下使用半透明黑色 */
+  border: 1px solid rgba(255, 255, 255, 0.08); /* 微微的亮边 */
+  box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.02),
+          inset 0 0 40px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* 暗黑模式下的顶部和左侧发光边缘（调低亮度，符合暗夜质感） */
+.dark .glass-card-custom::before {
+  background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.25),
+          transparent
+  );
+}
+.dark .glass-card-custom::after {
+  background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.25),
+          transparent,
+          rgba(255, 255, 255, 0.05)
+  );
+}
+

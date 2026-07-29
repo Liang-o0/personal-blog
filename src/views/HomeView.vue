@@ -7,7 +7,7 @@
       style="--delay: 100ms"
     >
       <!-- Greeting Card -->
-      <div class="glass-card rounded-[2rem] p-8 md:p-10 flex flex-col justify-between space-y-8 relative overflow-hidden">
+      <div class="glass-card-custom rounded-[2rem] p-8 md:p-10 flex flex-col justify-between space-y-8 relative overflow-hidden">
         <div class="absolute -right-16 -top-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
         
         <div class="space-y-6">
@@ -16,16 +16,16 @@
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
             </span>
-            PWL Journal · Built with Vue 3
+            Liang Journal
           </div>
 
           <h1 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl lg:text-6xl leading-[1.1]">
-            <TextAnimate text="欢迎来到我的" />
+            <TextAnimate text="Nice To Meet You Here！" />
             <br />
             <TextAnimate text="精神角落 ✨" class="text-gradient" />
           </h1>
           <p class="max-w-xl text-balance text-base leading-relaxed text-muted">
-            你好，我是梁。这里是我的个人博客，记录生活、灵感、代码和日常的奇思妙想。
+            你好，我是亮。这里是我的个人博客，记录生活、灵感、代码和日常的奇思妙想。
             希望你在这里能找到共鸣，哪怕只是一瞬间的启发。
           </p>
         </div>
@@ -40,13 +40,13 @@
             text1="阅读最新文章"
             text2="GO READ ➔"
             href="#articles"
-            class="bg-gradient-to-r from-secondary/80 to-accent/80"
+            class="bg-gradient-to-r from-secondary/80 to-[#fa5c15]/80"
           />
         </div>
       </div>
 
       <!-- Quick Info Card -->
-      <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden">
+      <div class="glass-card-custom rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden">
         <div class="absolute -left-16 -bottom-16 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
         
         <div class="space-y-6 relative z-10">
@@ -62,7 +62,7 @@
               </div>
               <div>
                 <p class="text-xs text-muted">目前致力于</p>
-                <p class="text-sm font-semibold text-text">探索前端美学 & AI 智能</p>
+                <p class="text-sm font-semibold text-text">学习[狗头]</p>
               </div>
             </div>
             
@@ -106,7 +106,7 @@
         <div 
           v-for="hobby in hobbies" 
           :key="hobby.title"
-          class="glass-card rounded-2xl p-6 transition-all duration-500 ease-custom hover:-translate-y-2 border border-border/40 hover:border-primary/30 group"
+          class="glass-card-custom rounded-2xl p-6 transition-all duration-500 ease-custom hover:-translate-y-2 border border-border/40 hover:border-primary/30 group"
         >
           <div class="h-12 w-12 rounded-2xl bg-card border border-border/50 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500 ease-custom">
             <iconify-icon :icon="hobby.icon" class="text-2xl"></iconify-icon>
@@ -128,28 +128,7 @@
         <h2 class="mt-1 text-3xl font-bold tracking-tight text-text"><TextAnimate text="我喜欢的瞬间" :delay="45" /></h2>
       </div>
 
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div 
-          v-for="(photo, index) in favoritePhotos" 
-          :key="index"
-          class="glass-card rounded-[1.5rem] p-3 group overflow-hidden border border-border/30 hover:border-accent/30 transition-all duration-500 ease-custom"
-        >
-          <div class="overflow-hidden rounded-[1rem] aspect-[4/3] bg-bg relative">
-            <img 
-              :src="photo.url" 
-              :alt="photo.caption" 
-              class="w-full h-full object-cover transition-transform duration-700 ease-custom group-hover:scale-[1.06] group-hover:rotate-1"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-custom flex items-end p-4">
-              <span class="text-xs font-semibold text-white tracking-wide">{{ photo.caption }}</span>
-            </div>
-          </div>
-          <div class="mt-3 px-2 pb-1 flex items-center justify-between">
-            <span class="text-sm font-semibold text-text">{{ photo.title }}</span>
-            <span class="text-[10px] uppercase font-bold tracking-wider text-accent">{{ photo.date }}</span>
-          </div>
-        </div>
-      </div>
+      <ThreeDCarousel :images="favoritePhotos" />
     </section>
 
     <!-- Articles Section (个人的文章) -->
@@ -190,7 +169,7 @@
 
         <!-- Dynamic Articles loading -->
         <div class="space-y-4">
-          <div v-if="loading" class="glass-card rounded-3xl p-8 space-y-4">
+          <div v-if="loading" class="glass-card-custom rounded-3xl p-8 space-y-4">
             <div class="h-4 w-1/4 animate-pulse rounded bg-border"></div>
             <div class="h-8 w-3/4 animate-pulse rounded bg-border"></div>
             <div class="h-4 w-full animate-pulse rounded bg-border"></div>
@@ -200,7 +179,7 @@
             <div 
               v-for="post in filteredPosts" 
               :key="post.slug"
-              class="glass-card rounded-[1.75rem] p-6 hover:shadow-xl transition-all duration-500 ease-custom group border border-border/40 hover:border-primary/20 flex flex-col justify-between"
+              class="glass-card-custom rounded-[1.75rem] p-6 hover:shadow-xl transition-all duration-500 ease-custom group border border-border/40 hover:border-primary/20 flex flex-col justify-between"
             >
               <div class="space-y-3">
                 <div class="flex items-center justify-between text-xs text-muted">
@@ -240,7 +219,7 @@
             </div>
           </template>
 
-          <div v-else class="glass-card rounded-3xl p-8 text-center text-muted text-sm">
+          <div v-else class="glass-card-custom rounded-3xl p-8 text-center text-muted text-sm">
             该分类下暂无文章。
           </div>
         </div>
@@ -257,7 +236,7 @@
           <div 
             v-for="project in personalWorks" 
             :key="project.title"
-            class="glass-card rounded-[1.75rem] p-6 hover:shadow-xl transition-all duration-500 ease-custom border border-border/40 hover:border-secondary/20 flex flex-col justify-between relative overflow-hidden group"
+            class="glass-card-custom rounded-[1.75rem] p-6 hover:shadow-xl transition-all duration-500 ease-custom border border-border/40 hover:border-secondary/20 flex flex-col justify-between relative overflow-hidden group"
           >
             <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-colors duration-500"></div>
             
@@ -304,6 +283,12 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import fm from 'front-matter'
 import SlideButton from '../components/ui/SlideButton.vue'
 import TextAnimate from '../components/ui/TextAnimate.vue'
+import ThreeDCarousel from '../components/ui/ThreeDCarousel.vue'
+
+// Import local photos
+import photo1 from '../assets/myphotos/test1.jpg'
+import photo2 from '../assets/myphotos/test2.jpg'
+import photo3 from '../assets/myphotos/test3.jpg'
 
 const posts = ref([])
 const loading = ref(true)
@@ -336,21 +321,21 @@ const hobbies = [
 // Personal photos definitions (using Picsum Photos high quality random ids)
 const favoritePhotos = [
   {
-    title: '海边落日',
+    title: '新疆',
     caption: '落日沉入大海，泛起橘粉色的波光',
-    url: 'https://picsum.photos/id/10/800/600',
+    url: photo1,
     date: 'SUMMER',
   },
   {
-    title: '林间木屋',
+    title: '新疆',
     caption: '晨光穿透林间树梢，照亮安静的小屋',
-    url: 'https://picsum.photos/id/15/800/600',
+    url: photo2,
     date: 'AUTUMN',
   },
   {
-    title: '角落咖啡馆',
+    title: '新疆',
     caption: '午后的一杯拿铁，配上翻开的书页',
-    url: 'https://picsum.photos/id/30/800/600',
+    url: photo3,
     date: 'WINTER',
   },
   {
@@ -366,7 +351,7 @@ const personalWorks = [
   {
     title: 'PWL Space',
     icon: 'lucide:layout-template',
-    description: '一个完全基于玻璃拟态 (Glassmorphism) 风格设计的个人灵感面板，探索极简与华丽视觉的交界。',
+    description: '一个完全基于Glassmorphism风格设计的个人灵感面板。',
     status: 'ACTIVE',
     technologies: ['Vue 3', 'Tailwind', 'Anime.js'],
     link: '#'
@@ -515,6 +500,6 @@ onBeforeUnmount(() => {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+  background-image: var(--accent-gradient);
 }
 </style>
