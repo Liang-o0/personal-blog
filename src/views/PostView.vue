@@ -8,20 +8,20 @@
       返回首页
     </router-link>
 
-    <div v-if="loading" class="glass-card rounded-[1.75rem] p-8 space-y-4">
+    <div v-if="loading" class="glass-card-custom rounded-[1.75rem] p-8 space-y-4">
       <div class="h-4 w-32 animate-pulse rounded bg-border"></div>
       <div class="h-10 w-4/5 animate-pulse rounded bg-border"></div>
       <div class="h-4 w-full animate-pulse rounded bg-border"></div>
     </div>
 
-    <div v-else-if="errorMessage" class="glass-card rounded-[1.75rem] p-8 space-y-3">
+    <div v-else-if="errorMessage" class="glass-card-custom rounded-[1.75rem] p-8 space-y-3">
       <p class="text-xs font-bold uppercase tracking-widest text-primary">404</p>
       <h1 class="text-3xl font-extrabold tracking-tight text-text"><TextAnimate text="文章未找到" /></h1>
       <p class="text-sm leading-relaxed text-muted">{{ errorMessage }}</p>
     </div>
 
     <article v-else-if="post" class="space-y-8">
-      <header class="glass-card overflow-hidden rounded-[1.75rem]">
+      <header class="glass-card-custom overflow-hidden rounded-[1.75rem]">
         <div class="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
           <div class="space-y-5">
             <div class="flex flex-wrap items-center gap-3 text-xs text-muted">
@@ -69,7 +69,7 @@
         </div>
       </header>
 
-      <div class="glass-card rounded-[1.75rem] p-6 sm:p-8">
+      <div class="glass-card-custom rounded-[1.75rem] p-6 sm:p-8">
         <article
           class="prose max-w-none dark:prose-invert prose-headings:tracking-tight prose-headings:text-text prose-a:text-primary hover:prose-a:opacity-85 prose-strong:text-text prose-code:rounded-md prose-code:bg-card prose-code:border prose-code:border-border/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none dark:prose-pre:bg-card/40 dark:prose-pre:border dark:prose-pre:border-border/30"
           v-html="renderedContent"

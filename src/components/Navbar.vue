@@ -1,6 +1,6 @@
 <template>
   <nav class="sticky top-4 z-50 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="glass-card flex items-center justify-between rounded-[1.5rem] px-4 py-3 sm:px-5">
+    <div class="glass-card-custom flex items-center justify-between rounded-[1.5rem] px-4 py-3 sm:px-5">
       <router-link to="/" class="group flex items-center gap-3">
         <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-primary via-secondary to-accent text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform duration-500 ease-custom group-hover:-rotate-6 group-hover:scale-105">
           L
