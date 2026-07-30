@@ -5,11 +5,11 @@
       <div class="grid gap-8 p-8 md:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div class="space-y-6">
           <p class="text-xs font-bold uppercase tracking-widest text-primary"><TextAnimate text="The Blogger" /></p>
-          <h1 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl leading-[1.15]">
+          <h2 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl leading-[1.15]">
             <TextAnimate text="你好，我是liang ——" />
             <br />
-            <TextAnimate text="欢迎来到我的 Personal Blog." :delay="35" />
-          </h1>
+            <TextAnimate text="欢迎来到我的  Personal Blog." :delay="35" />
+          </h2>
           <p class="text-base leading-relaxed text-muted">
             这是一个用来安放文字、代码和瞬间的地方。我喜欢用文字把思绪固定，用代码把想象变为现实，用镜头把美好的瞬间留存。
           </p>

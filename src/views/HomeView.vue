@@ -19,11 +19,12 @@
             Liang Journal
           </div>
 
-          <h1 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl lg:text-6xl leading-[1.1]">
+          <h2 class="text-balance text-4xl font-extrabold tracking-tight text-text sm:text-5xl lg:text-6xl leading-[1.1]">
             <TextAnimate text="Nice To Meet You Here！" />
             <br />
             <TextAnimate text="精神角落 ✨" class="text-gradient" />
-          </h1>
+          </h2>
+
           <p class="max-w-xl text-balance text-base leading-relaxed text-muted">
             你好，我是亮。这里是我的个人博客，记录生活、灵感、代码和日常的奇思妙想。
             希望你在这里能找到共鸣，哪怕只是一瞬间的启发。
@@ -285,8 +286,7 @@ import SlideButton from '../components/ui/SlideButton.vue'
 import TextAnimate from '../components/ui/TextAnimate.vue'
 import ThreeDCarousel from '../components/ui/ThreeDCarousel.vue'
 
-// Import local photos
-import photo1 from '../assets/myphotos/test1.jpg'
+// Import local photo
 import photo2 from '../assets/myphotos/test2.jpg'
 import photo3 from '../assets/myphotos/test3.jpg'
 
@@ -320,12 +320,6 @@ const hobbies = [
 
 // Personal photos definitions (using Picsum Photos high quality random ids)
 const favoritePhotos = [
-  {
-    title: '新疆',
-    caption: '落日沉入大海，泛起橘粉色的波光',
-    url: photo1,
-    date: 'SUMMER',
-  },
   {
     title: '新疆',
     caption: '晨光穿透林间树梢，照亮安静的小屋',

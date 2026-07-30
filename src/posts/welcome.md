@@ -1,6 +1,6 @@
 ---
 title: Hello Nice to meet you!
-date: 2026
+date: 2026.09.11
 tags: ["随笔", "日记"]
 description: 这是我使用 Vue 3 搭建的静态博客第一篇文章。
 ---

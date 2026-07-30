@@ -7,7 +7,7 @@
         </span>
         <div class="hidden sm:block">
           <div class="text-sm font-semibold tracking-tight text-text">britliang Journal</div>
-          <div class="text-xs text-muted">hello its my personal Blog</div>
+          <div class="text-xs text-muted">hello it's my personal Blog</div>
         </div>
       </router-link>
 
