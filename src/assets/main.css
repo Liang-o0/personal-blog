@@ -51,11 +51,11 @@ body {
   position: relative;
 
 /*  添加背景图片，从本地导入*/
-  background-image: url('./pexels-kienvirak.jpg'); /* 替换成你在 public 文件夹下的图片名 */
+  background-image: url('./pexels-kienvirak.webp'); /* 替换成你在 public 文件夹下的图片名 */
   background-size: cover;              /* 核心：让图片等比例缩放撑满屏幕，不拉伸变形 */
   background-position: center;         /* 图片居中对齐 */
   background-repeat: no-repeat;        /* 图片不重复平铺 */
-  background-attachment: fixed;        /* 可选：视差固定效果，页面滚动时背景图保持不动 */
+  background-attachment: scroll;        /* 可选：视差固定效果，页面滚动时背景图保持不动 */
 }
 
 /* 暗黑模式下的 body 背景优化 */
@@ -63,7 +63,7 @@ body {
   /* 在背景图上方叠加一层 75% 不透明度的纯黑色，起到压暗背景、突出前台文字的效果 */
   background-image:
           linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-          url('./pexels-kienvirak.jpg');
+          url('./pexels-kienvirak.webp');
 }
 
 
@@ -261,4 +261,5 @@ body {
           rgba(255, 255, 255, 0.05)
   );
 }
+
 

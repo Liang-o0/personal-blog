@@ -95,6 +95,8 @@ const errorMessage = ref('')
 marked.setOptions({
   breaks: true,
   gfm: true,
+  // 禁止文章中的原始 HTML，避免 v-html 引入脚本或恶意属性。
+  html: false,
 })
 
 const renderedContent = computed(() => {
