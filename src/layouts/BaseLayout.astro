@@ -1,0 +1,6 @@
+---
+import '../assets/main.css'
+const { title = 'PWL Journal', description = 'PWL Journal' } = Astro.props
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>{title}</title><meta name="description" content={description} /><link rel="canonical" href={canonical} /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:type" content="article" /><meta property="og:image" content="https://britliang.top/og-cover.png" /><meta name="twitter:card" content="summary_large_image" /></head><body><main><slot /></main></body></html>

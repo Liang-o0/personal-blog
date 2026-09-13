@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://britliang.top/sitemap.xml
