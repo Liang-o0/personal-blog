@@ -1,4 +1,5 @@
-﻿---
-import BaseLayout from '../layouts/BaseLayout.astro'
 ---
-<BaseLayout title="PWL Journal" description="PWL 的个人博客，分享前端开发、技术实践与生活记录。"><h1>PWL Journal</h1><p>文章已迁移到 Astro 静态页面。</p><p><a href="/post/welcome">阅读最新文章</a></p></BaseLayout>
+import '../assets/main.css'
+import AstroHome from '../components/AstroHome.vue'
+---
+<AstroHome client:load />
