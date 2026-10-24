@@ -30,7 +30,7 @@ const isCurrent = (href: string) => href === '/'
   const update = () => {
     const y = window.scrollY;
     header?.classList.toggle('is-scaled', y >= 200);
-    header?.classList.toggle('is-hidden', window.innerWidth >= 768 && y > 800 && y > lastY);
+    header?.classList.toggle('is-hidden', y > 800 && y > lastY);
     lastY = y;
     frame = 0;
   };
