@@ -16,3 +16,8 @@ dist/
 *.log
 *.tmp
 *.temp
+
+# Local development instructions and architecture notes
+/AGENTS.md
+/AI_PROMPT.md
+/ARCHITECTURE.md
