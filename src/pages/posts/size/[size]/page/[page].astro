@@ -1,0 +1,17 @@
+---
+import ArchivePage from '../../../../../components/posts/ArchivePage.astro';
+import { getPostIndex } from '../../../../../lib/posts';
+import { ARCHIVE_PAGE_SIZE, ARCHIVE_PAGE_SIZES, paginateArchive } from '../../../../../lib/archive-pagination';
+export async function getStaticPaths() {
+  const { posts } = await getPostIndex();
+  return ARCHIVE_PAGE_SIZES.filter(size => size !== ARCHIVE_PAGE_SIZE).flatMap(pageSize => {
+    const { pageCount } = paginateArchive(posts, 1, pageSize);
+    return Array.from({ length: pageCount }, (_, index) => ({
+      params: { size: String(pageSize), page: String(index + 1) },
+      props: { page: index + 1, pageSize },
+    }));
+  });
+}
+interface Props { page: number; pageSize: number }
+---
+<ArchivePage page={Astro.props.page} pageSize={Astro.props.pageSize} />

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from './PostList.astro';
+import SlideButton from '../ui/SlideButton.vue';
+import { seriesUrl, type SeriesPage } from '../../lib/posts';
+import '../../styles/posts.css';
+interface Props { directory: SeriesPage }
+const { directory: { series, posts, total, page, pageCount } } = Astro.props;
+---
+<BaseLayout title={`${series.data.title}${page > 1 ? ` · 第 ${page} 页` : ''}`} description={series.data.description}>
+  <header class="archive-heading series-heading">
+    <div class="series-back-action">
+      <SlideButton text1="返回文章" text2="查看全部" href="/posts" arrowDirection="left" label="返回全部文章" />
+    </div>
+    <p class="eyebrow">Reading / Series</p>
+    <h1>{series.data.title}<span>.</span></h1>
+    <p class="muted">{series.data.description}</p>
+    <p class="series-count">已发布 <strong>{total}</strong> 篇 <span class="muted">· 按篇章顺序阅读</span></p>
+  </header>
+  <section aria-label={`${series.data.title}文章目录`}>
+    {posts.length > 0 ? <PostList posts={posts} numbered /> : (
+      <div class="glass series-empty">
+        <p class="eyebrow">To be continued</p>
+        <h2>文章正在整理中</h2>
+        <p class="muted">这个专题的第一篇文章发布后，会出现在这里。</p>
+        <a href="/posts" class="directory-back">先看看其他文章 →</a>
+      </div>
+    )}
+  </section>
+  {pageCount > 1 && (
+    <nav class="series-pagination" aria-label="专题目录分页">
+      {page > 1 ? <a href={seriesUrl(series.id, page - 1)} rel="prev">← 上一页</a> : <span class="muted" aria-disabled="true">← 上一页</span>}
+      <span aria-current="page">第 {page} / {pageCount} 页</span>
+      {page < pageCount ? <a href={seriesUrl(series.id, page + 1)} rel="next">下一页 →</a> : <span class="muted" aria-disabled="true">下一页 →</span>}
+    </nav>
+  )}
+</BaseLayout>

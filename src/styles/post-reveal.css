@@ -1,0 +1,24 @@
+/* Shared stagger parameters for homepage and archive article lists. */
+:root {
+  --post-reveal-duration: .5s;
+  --post-reveal-step: .08s;
+  --post-reveal-distance: 10px;
+  --post-reveal-easing: cubic-bezier(.16, 1, .3, 1);
+}
+
+.post-reveal.reveal-pending { opacity: 0; translate: 0 var(--post-reveal-distance); }
+.post-reveal.reveal-visible {
+  animation: post-reveal var(--post-reveal-duration) var(--post-reveal-easing) backwards;
+  animation-delay: calc(var(--post-reveal-index, 0) * var(--post-reveal-step));
+}
+
+/* Individual translate keeps the existing hover transform independent. */
+@keyframes post-reveal {
+  from { opacity: 0; translate: 0 var(--post-reveal-distance); }
+  to { opacity: 1; translate: 0 0; }
+}
+
+.post-reveal:focus-visible { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .post-reveal.reveal-pending, .post-reveal.reveal-visible { animation: none; opacity: 1; translate: none; }
+}

@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { postUrl } from '../../lib/posts';
+import '../../styles/post-reveal.css';
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  seriesById?: Map<string, CollectionEntry<'series'>>;
+  numbered?: boolean;
+  offset?: number;
+  tagsPlacement?: 'summary' | 'date';
+}
+const { posts, seriesById, numbered = false, offset = 0, tagsPlacement = 'summary' } = Astro.props;
+---
+<div class="post-list">
+  {posts.map((post, index) => (
+    <a class="glass post-row post-reveal" href={postUrl(post.id)}>
+      <span class="eyebrow">{String(numbered ? post.data.seriesOrder : offset + index + 1).padStart(2, '0')}</span>
+      <div class="post-summary">
+        {post.data.series && seriesById && <p class="post-series-label">{seriesById.get(post.data.series.id)?.data.title}</p>}
+        <h2>{post.data.title}</h2>
+        {post.data.description && <p class="muted">{post.data.description}</p>}
+        {tagsPlacement === 'summary' && post.data.tags.length > 0 && <div class="muted post-tags">{post.data.tags.map(tag => `#${tag}`).join('  ')}</div>}
+      </div>
+      {tagsPlacement === 'date' ? (
+        <div class="post-date-meta">
+          <time class="muted" datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { timeZone: 'UTC' })}</time>
+          {post.data.tags.length > 0 && <div class="muted post-tags">{post.data.tags.map(tag => <span>#{tag}</span>)}</div>}
+        </div>
+      ) : <time class="muted" datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { timeZone: 'UTC' })}</time>}
+    </a>
+  ))}
+</div>
+
+<style>
+  .post-date-meta { min-width: 0; max-width: 260px; text-align: right; justify-self: end; }
+  .post-date-meta .post-tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 10px; }
+  .post-date-meta .post-tags span { overflow-wrap: anywhere; }
+  @media (max-width: 640px) {
+    .post-date-meta { grid-column: 2; max-width: 100%; }
+  }
+</style>

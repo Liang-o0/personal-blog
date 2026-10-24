@@ -1,0 +1,17 @@
+---
+import SeriesDirectory from '../../../../../components/posts/SeriesDirectory.astro';
+import { getPostIndex, type SeriesPage } from '../../../../../lib/posts';
+export async function getStaticPaths() {
+  const index = await getPostIndex();
+  return index.series.flatMap(series => {
+    const { pageCount } = index.getSeriesPage(series.id);
+    return Array.from({ length: pageCount - 1 }, (_, offset) => {
+      const page = offset + 2;
+      return { params: { id: series.id, page: String(page) }, props: { directory: index.getSeriesPage(series.id, page) } };
+    });
+  });
+}
+interface Props { directory: SeriesPage }
+const { directory } = Astro.props;
+---
+<SeriesDirectory directory={directory} />

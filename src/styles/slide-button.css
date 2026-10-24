@@ -1,0 +1,57 @@
+/* Shared defaults for every SlideButton; override variables on a parent if needed. */
+:root {
+  --slide-button-duration: 500ms;
+  --slide-button-arrow-duration: 700ms;
+  --slide-button-easing: cubic-bezier(.2, .8, .2, 1);
+  --slide-button-distance: 1.8em;
+  --slide-button-hover-scale: 1.03;
+  --slide-button-font-size: 1rem;
+  --slide-button-padding-x: 1.1rem;
+  --slide-button-padding-y: .65rem;
+  --slide-button-radius: 999px;
+  --slide-button-color: var(--mint);
+  --slide-button-background: rgba(12, 21, 23, .32);
+  --slide-button-border: rgba(158, 229, 204, .3);
+  --slide-button-overlay: rgba(158, 229, 204, .12);
+}
+
+.slide-button {
+  position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center;
+  overflow: hidden; max-width: 100%; min-height: 44px;
+  padding: var(--slide-button-padding-y) var(--slide-button-padding-x);
+  border: 1px solid var(--slide-button-border); border-radius: var(--slide-button-radius);
+  background: var(--slide-button-background); color: var(--slide-button-color);
+  font-family: inherit; font-size: var(--slide-button-font-size); font-weight: 500; line-height: 1.5;
+  text-decoration: none; cursor: pointer; vertical-align: middle;
+  transition: transform var(--slide-button-duration) var(--slide-button-easing), border-color var(--slide-button-duration) var(--slide-button-easing);
+}
+.slide-button__content { position: relative; display: inline-flex; align-items: center; gap: .5em; min-width: 0; }
+.slide-button__labels, .slide-button__arrows { display: grid; align-items: center; }
+.slide-button__labels > *, .slide-button__arrows > * { grid-area: 1 / 1; }
+.slide-button__labels { overflow-wrap: anywhere; }
+.slide-button__arrows { flex-shrink: 0; }
+.slide-button--back .slide-button__arrows { order: -1; }
+.slide-button__initial, .slide-button__alternate {
+  transition: transform var(--slide-button-duration) var(--slide-button-easing), opacity var(--slide-button-duration) var(--slide-button-easing);
+}
+.slide-button__arrows > * { transition-duration: var(--slide-button-arrow-duration); }
+.slide-button__alternate { opacity: 0; transform: translateY(var(--slide-button-distance)); }
+.slide-button__overlay {
+  position: absolute; inset: 0; z-index: -1; background: var(--slide-button-overlay);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--slide-button-duration) var(--slide-button-easing);
+}
+.slide-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.slide-button:focus-visible:not([aria-disabled="true"]) .slide-button__initial { opacity: 0; transform: translateY(calc(-1 * var(--slide-button-distance))); }
+.slide-button:focus-visible:not([aria-disabled="true"]) .slide-button__alternate { opacity: 1; transform: translateY(0); }
+.slide-button:focus-visible:not([aria-disabled="true"]) .slide-button__overlay { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .slide-button:hover:not([aria-disabled="true"]) { transform: scale(var(--slide-button-hover-scale)); border-color: var(--slide-button-color); }
+  .slide-button:hover:not([aria-disabled="true"]) .slide-button__initial { opacity: 0; transform: translateY(calc(-1 * var(--slide-button-distance))); }
+  .slide-button:hover:not([aria-disabled="true"]) .slide-button__alternate { opacity: 1; transform: translateY(0); }
+  .slide-button:hover:not([aria-disabled="true"]) .slide-button__overlay { transform: scaleX(1); }
+}
+.slide-button[aria-disabled="true"] { opacity: .5; cursor: not-allowed; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .slide-button, .slide-button * { transition: none !important; transform: none !important; }
+}

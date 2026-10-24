@@ -1,6 +1,34 @@
 ---
-import '../assets/main.css'
-const { title = 'PWL Journal', description = 'PWL Journal' } = Astro.props
-const canonical = new URL(Astro.url.pathname, Astro.site)
+import '../styles/global.css';
+import '../styles/post-reveal.css';
+import '../styles/waline.css';
+import TopNav from '../components/TopNav.astro';
+import GlassyBackground from '../components/ui/GlassyBackground.vue';
+import { ClientRouter } from 'astro:transitions';
+interface Props { title: string; description?: string }
+const { title, description = '亮的个人博客：技术、生活、思考与成长。' } = Astro.props;
 ---
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>{title}</title><meta name="description" content={description} /><link rel="canonical" href={canonical} /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:url" content={canonical} /><meta property="og:type" content="article" /><meta property="og:image" content="https://britliang.top/og-cover.png" /><meta name="twitter:card" content="summary_large_image" /></head><body><main><slot /></main></body></html>
+<script>
+  import '../scripts/post-reveal';
+</script>
+<!doctype html>
+<html lang="zh-CN" transition:animate="none">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={`${title} · 亮的博客`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+    <title>{title} · 亮的博客</title>
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <div transition:persist="site-background"><GlassyBackground /></div>
+    <TopNav />
+    <main class="container"><slot /></main>
+    <footer class="container footer"><span>© {new Date().getFullYear()} 亮 · britliang.top</span><span>Keep making, keep becoming.</span></footer>
+  </body>
+</html>

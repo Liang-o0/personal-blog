@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from './PostList.astro';
+import SlideButton from '../ui/SlideButton.vue';
+import { getPostIndex, seriesUrl } from '../../lib/posts';
+import '../../styles/posts.css';
+import ArchivePagination from '../ui/ArchivePagination.vue';
+import { paginateArchive, archiveUrl, ARCHIVE_PAGE_SIZE } from '../../lib/archive-pagination';
+interface Props { page?: number; pageSize?: number }
+const { page = 1, pageSize = ARCHIVE_PAGE_SIZE } = Astro.props;
+const index = await getPostIndex();
+const archive = paginateArchive(index.posts, page, pageSize);
+---
+<BaseLayout title={page === 1 ? '文章' : `文章 · 第 ${page} 页`}>
+  <header class="archive-heading">
+    <p class="eyebrow">Writing / Archive</p>
+    <h1>文章<span>.</span></h1>
+    <p class="muted">技术、生活、思考与成长。每一篇都是某段时间的切片。</p>
+  </header>
+  <section class="series-overview" aria-labelledby="series-title">
+    <div class="series-intro">
+      <p class="eyebrow">Explore a series</p>
+      <h2 id="series-title">沿着一个问题，<br />读下去。</h2>
+      <p class="muted">把零散的思考连成线，<br />慢慢形成一张网。</p>
+      <span class="series-total">{String(index.series.length).padStart(2, '0')} 个专题</span>
+    </div>
+    <div class="series-list">
+      {index.series.map((series, position) => (
+        <article class="series-row post-reveal">
+          <span class="eyebrow series-number">{String(position + 1).padStart(2, '0')}</span>
+          <div class="series-summary">
+            <h3><a href={seriesUrl(series.id)}>{series.data.title}</a></h3>
+            <p class="muted">{series.data.description}</p>
+            <div class="series-actions">
+              <SlideButton text1={`${index.getSeriesPosts(series.id).length} 篇文章`} text2="查看文章" href={seriesUrl(series.id)} label={`${series.data.title}：${index.getSeriesPosts(series.id).length} 篇文章，查看目录`} arrow={false} />
+              <SlideButton text1="进入专题" text2="开始阅读" href={seriesUrl(series.id)} label={`进入专题：${series.data.title}`} />
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+  <section id="all-posts" aria-labelledby="all-posts-title">
+    <div class="section-heading">
+      <div><p class="eyebrow">All writing</p><h2 id="all-posts-title">全部文章</h2></div>
+      <span class="muted">{archive.total} 篇 · 按时间排列 · 第 {page} / {archive.pageCount} 页</span>
+    </div>
+    {archive.posts.length ? <PostList posts={archive.posts} seriesById={index.seriesById} offset={archive.offset} tagsPlacement="date" /> : <p class="muted">第一篇文章正在准备中。</p>}
+    {archive.total > 0 && <ArchivePagination client:visible current={page} total={archive.total} pageSize={pageSize} />}
+    {archive.pageCount > 1 && <noscript><nav aria-label="文章翻页">
+      {page > 1 && <a href={archiveUrl(page - 1, pageSize)}>← 上一页</a>}
+      {' · '}
+      {page < archive.pageCount && <a href={archiveUrl(page + 1, pageSize)}>下一页 →</a>}
+    </nav></noscript>}
+  </section>
+</BaseLayout>
+

@@ -1,0 +1,13 @@
+---
+import SeriesDirectory from '../../../../components/posts/SeriesDirectory.astro';
+import { getPostIndex, type SeriesPage } from '../../../../lib/posts';
+export async function getStaticPaths() {
+  const index = await getPostIndex();
+  return index.series.map(series => ({
+    params: { id: series.id }, props: { directory: index.getSeriesPage(series.id) },
+  }));
+}
+interface Props { directory: SeriesPage }
+const { directory } = Astro.props;
+---
+<SeriesDirectory directory={directory} />

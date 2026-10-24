@@ -1,5 +1,63 @@
 ---
-import '../assets/main.css'
-import AstroHome from '../components/AstroHome.vue'
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ThreeDCarousel from '../components/ui/ThreeDCarousel.vue';
+import { personalPhotos } from '../data/personalPhotos';
+import { getPostIndex } from '../lib/posts';
+import '../styles/post-reveal.css';
+
+const posts = (await getPostIndex()).posts.slice(0, 5);
 ---
-<AstroHome client:load />
+
+<BaseLayout title="首页">
+  <section class="home-carousel" aria-label="个人照片">
+    <div class="home-carousel-stage">
+      <ThreeDCarousel client:visible images={personalPhotos} autoplay={true} autoplaySpeed={0.15} />
+    </div>
+    <img class="home-carousel-illustration" src="/illustrations/sleepingcat.png" alt="熟睡的小猫插画" width="640" height="640" />
+  </section>
+
+  <section class="home-intro">
+    <div>
+      <p class="eyebrow">Software engineering student</p>
+      <h2 class="display intro-title">你的人生，<br /><span>充满可能性</span></h2>
+      <p class="muted intro-description">Nice To Meet You!</p>
+      <p class="muted intro-description">Hello Everyone，我是亮，这里记录生活中那些让我停下来思考的瞬间</p>
+    </div>
+    <div class="glass currently-card">
+      <div class="eyebrow">Currently</div>
+      <p>阅读《穷爸爸富爸爸》ing....</p>
+      <div class="currently-meta"><span>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', timeZone: 'Asia/Shanghai' })}</span></div>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div>
+      <p class="eyebrow">A small manifesto</p>
+      <h2>慢慢来，<br />但不要停下来</h2>
+    </div>
+    <div class="glass manifesto-card">
+      <p>🦌国国号:勇敢、积极、善良、自信.</p><br>
+      <p>Hoping everyone will be a brave,positive,confident and kind person,so do I.</p><br>
+      <p>Environment matters 100 times more than willpower.</p>
+    </div>
+  </section>
+
+  <section class="latest-notes">
+    <div class="section-heading">
+      <div><p class="eyebrow">Latest notes</p><h2>最近文章</h2></div>
+      <a class="muted" href="/posts">查看全部 →</a>
+    </div>
+    <div class="post-list">
+      {posts.map((post, i) => (
+        <a class="glass post-row post-reveal" href={`/posts/${post.id}`}>
+          <span class="eyebrow">{String(i + 1).padStart(2, '0')}</span>
+          <span class="post-summary">
+            <strong>{post.data.title}</strong>
+            <small class="muted">{post.data.description}</small>
+          </span>
+          <time class="muted" datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

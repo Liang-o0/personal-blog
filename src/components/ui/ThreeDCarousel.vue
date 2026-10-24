@@ -8,11 +8,11 @@
       <!-- Cylinder Container -->
       <div
         class="relative flex h-full items-center justify-center cursor-grab active:cursor-grabbing"
-        style="transform-style: preserve-3d; will-change: transform;"
+        style="transform-style: preserve-3d;"
         :style="{
           transform: `rotateY(${rotation}deg)`,
           width: `${width}px`,
-          transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)'
+          willChange: canAutoplay || isDragging ? 'transform' : 'auto'
         }"
         @pointerdown="onPointerDown"
         @pointermove="onPointerMove"
@@ -77,8 +77,9 @@
             type="button"
             class="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-full transition-colors duration-300 md:-right-16 md:top-0"
             @click="activePhoto = null"
+            aria-label="关闭照片预览"
           >
-            <iconify-icon icon="lucide:x" class="text-xl"></iconify-icon>
+            <span aria-hidden="true" class="text-xl leading-none">×</span>
           </button>
         </div>
       </div>
@@ -87,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   images: {
@@ -100,7 +101,7 @@ const props = defineProps({
   },
   autoplaySpeed: {
     type: Number,
-    default: 0.15 // degrees per frame
+    default: 0.15 // degrees per 60 Hz frame; elapsed time keeps speed consistent
   }
 })
 
@@ -108,10 +109,20 @@ const rotation = ref(0)
 const isDragging = ref(false)
 const activePhoto = ref(null)
 const width = ref(1200)
+const containerRef = ref(null)
+const isInView = ref(false)
+const isPageVisible = ref(false)
+const reducedMotion = ref(true)
+const canAutoplay = computed(() => props.autoplay && props.images.length > 0 &&
+  isInView.value && isPageVisible.value && !reducedMotion.value &&
+  !isDragging.value && !activePhoto.value)
 
 let startX = 0
 let startRotation = 0
 let animationFrameId = null
+let lastFrameTime = null
+let observer = null
+let motionQuery = null
 
 // Responsive width calculation
 const updateWidth = () => {
@@ -178,33 +189,62 @@ const handleClick = (photo) => {
   activePhoto.value = photo
 }
 
-// Auto-rotation loop
-const animate = () => {
-  if (!isDragging.value && props.autoplay && !activePhoto.value) {
-    rotation.value += props.autoplaySpeed
+// Stop scheduling entirely when paused; never catch up elapsed background time.
+const stopAnimation = () => {
+  if (animationFrameId !== null) cancelAnimationFrame(animationFrameId)
+  animationFrameId = null
+  lastFrameTime = null
+}
+
+const animate = (time) => {
+  animationFrameId = null
+  if (!canAutoplay.value) { lastFrameTime = null; return }
+  if (lastFrameTime !== null) {
+    const elapsed = Math.min(time - lastFrameTime, 50)
+    rotation.value += props.autoplaySpeed * elapsed / (1000 / 60)
   }
+  lastFrameTime = time
   animationFrameId = requestAnimationFrame(animate)
 }
 
+watch(canAutoplay, (enabled) => {
+  if (!enabled) stopAnimation()
+  else if (animationFrameId === null) animationFrameId = requestAnimationFrame(animate)
+}, { flush: 'sync' })
+
+const updateVisibility = () => { isPageVisible.value = !document.hidden }
+const updateMotionPreference = () => { reducedMotion.value = motionQuery.matches }
+
 onMounted(() => {
   updateWidth()
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', updateWidth)
-  }
-  animationFrameId = requestAnimationFrame(animate)
+  window.addEventListener('resize', updateWidth)
+  document.addEventListener('visibilitychange', updateVisibility)
+  motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  motionQuery.addEventListener('change', updateMotionPreference)
+  updateMotionPreference()
+  updateVisibility()
+  observer = new IntersectionObserver(([entry]) => {
+    isInView.value = entry.isIntersecting && entry.intersectionRatio > 0
+  }, { threshold: 0 })
+  if (containerRef.value) observer.observe(containerRef.value)
 })
 
 onUnmounted(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', updateWidth)
-  }
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-  }
+  stopAnimation()
+  observer?.disconnect()
+  motionQuery?.removeEventListener('change', updateMotionPreference)
+  document.removeEventListener('visibilitychange', updateVisibility)
+  window.removeEventListener('resize', updateWidth)
 })
 </script>
 
 <style scoped>
+.glass-card-custom {
+  background: rgba(26, 46, 43, .58);
+  backdrop-filter: blur(18px) saturate(135%);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .2), inset 0 1px rgba(255, 255, 255, .08);
+}
+
 /* Lightbox Transition */
 .lightbox-enter-active,
 .lightbox-leave-active {

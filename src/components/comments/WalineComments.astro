@@ -1,0 +1,88 @@
+---
+import { walineConfig } from '../../config/waline';
+
+export interface Props {
+  /** The canonical path used to associate comments with an article. */
+  path?: string;
+  /** Waline interface language. */
+  lang?: string;
+  /** Placeholder shown in the comment editor. */
+  placeholder?: string;
+}
+
+const {
+  path = Astro.url.pathname,
+  lang = 'zh-CN',
+  placeholder = '分享你的想法…',
+} = Astro.props;
+const serializedConfig = JSON.stringify({ ...walineConfig, path, lang, placeholder });
+---
+
+<section class="waline-shell glass" aria-labelledby="waline-title">
+  <div class="waline-heading">
+    <div>
+      <p class="eyebrow">Comments</p>
+      <h2 id="waline-title">留下你的想法</h2>
+    </div>
+    <p class="muted">欢迎留下友善、具体的交流。</p>
+  </div>
+  <div
+    class="waline-mount"
+    data-waline
+    data-waline-config={serializedConfig}
+    aria-label="文章评论区"
+  ></div>
+</section>
+
+<script is:inline type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+  /** @typedef {{ destroy?: () => void }} WalineInstance */
+  /** @typedef {{ container: HTMLElement | null, instance: WalineInstance | null, listenersBound: boolean }} WalineState */
+
+  const stateKey = '__britliangWaline';
+  /** @type {WalineState} */
+  const state = window[stateKey] ?? (window[stateKey] = {
+    container: null,
+    instance: null,
+    listenersBound: false,
+  });
+
+  const dispose = () => {
+    if (state.instance && typeof state.instance.destroy === 'function') {
+      state.instance.destroy();
+    }
+    state.container = null;
+    state.instance = null;
+  };
+
+  /** @param {HTMLElement} container */
+  const readConfig = (container) => {
+    try {
+      return JSON.parse(container.dataset.walineConfig || '{}');
+    } catch {
+      return {};
+    }
+  };
+
+  const mount = () => {
+    const container = document.querySelector('[data-waline]');
+    if (!(container instanceof HTMLElement)) {
+      dispose();
+      return;
+    }
+    if (state.container === container && state.instance) return;
+
+    dispose();
+    state.instance = init({ el: container, ...readConfig(container) });
+    state.container = container;
+  };
+
+  if (!state.listenersBound) {
+    document.addEventListener('astro:before-swap', dispose);
+    document.addEventListener('astro:page-load', mount);
+    state.listenersBound = true;
+  }
+
+  mount();
+</script>
