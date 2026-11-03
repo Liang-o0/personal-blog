@@ -128,8 +128,17 @@ main article h2 { font-weight: 700; }
   .home-carousel { margin: 8px -12px -12px; }
   .post-row { grid-template-columns: 28px minmax(0, 1fr); gap: 10px; padding: 18px 16px; }
   .post-row time { grid-column: 2; }
+  .latest-notes .post-row { grid-template-columns: 28px minmax(0, 1fr) auto; align-items: start; }
+  .latest-notes .post-row time { grid-column: 3; grid-row: 1; align-self: start; }
+  .post-list--archive .post-row { grid-template-columns: 28px minmax(0, 1fr); }
+  .post-list--archive .post-date-meta { grid-column: 2; grid-row: 2; justify-self: start; align-self: start; max-width: none; margin-top: -12px; text-align: left; }
+  .post-list--archive .post-date-meta .post-tags { justify-content: flex-start; gap: 2px 8px; margin-top: 0; line-height: 1.6; }
   .archive-heading { padding: 64px 0 40px; }
   .footer { flex-direction: column; margin-top: 64px; }
+}
+
+@media (max-width: 767px) {
+  .home-carousel-illustration { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

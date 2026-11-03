@@ -11,7 +11,7 @@ interface Props {
 }
 const { posts, seriesById, numbered = false, offset = 0, tagsPlacement = 'summary' } = Astro.props;
 ---
-<div class="post-list">
+<div class:list={['post-list', tagsPlacement === 'date' && 'post-list--archive']}>
   {posts.map((post, index) => (
     <a class="glass post-row post-reveal" href={postUrl(post.id)}>
       <span class="eyebrow">{String(numbered ? post.data.seriesOrder : offset + index + 1).padStart(2, '0')}</span>
@@ -23,7 +23,6 @@ const { posts, seriesById, numbered = false, offset = 0, tagsPlacement = 'summar
       </div>
       {tagsPlacement === 'date' ? (
         <div class="post-date-meta">
-          <time class="muted" datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { timeZone: 'UTC' })}</time>
           {post.data.tags.length > 0 && <div class="muted post-tags">{post.data.tags.map(tag => <span>#{tag}</span>)}</div>}
         </div>
       ) : <time class="muted" datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { timeZone: 'UTC' })}</time>}

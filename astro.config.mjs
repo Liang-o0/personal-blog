@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
+import { rehypeAnswerReveal } from './src/lib/answer-reveal.ts';
 
 export default defineConfig({
   site: 'https://britliang.top',
@@ -13,6 +14,9 @@ export default defineConfig({
     vue(),
     mdx(),
   ],
+  markdown: {
+    rehypePlugins: [rehypeAnswerReveal],
+  },
   devToolbar: {
   enabled: false,
    },

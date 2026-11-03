@@ -22,3 +22,10 @@
 @media (prefers-reduced-motion: reduce) {
   .post-reveal.reveal-pending, .post-reveal.reveal-visible { animation: none; opacity: 1; translate: none; }
 }
+
+/* The answer remains in normal flow while its client enhancement is pending. */
+.answer-reveal[data-answer-reveal-pending] { visibility: hidden; }
+.answer-reveal { min-height: 1px; }
+@media (prefers-reduced-motion: reduce) {
+  .answer-reveal[data-answer-reveal-pending] { visibility: visible; }
+}
