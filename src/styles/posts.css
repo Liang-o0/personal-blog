@@ -20,8 +20,6 @@
 .series-count strong { font-family: 'DM Mono', monospace; color: var(--mint); }
 .series-empty { border-radius: 20px; padding: clamp(24px, 4vw, 46px); }
 .series-empty h2 { font-size: 1.5rem; font-weight: 700; margin: 12px 0; }
-.series-pagination { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); font-size: .85rem; }
-.series-pagination a { color: var(--mint); padding-block: 12px; }
 .reading-article { max-width: 760px; margin: 0 auto; padding: 100px 0 40px; }
 .article-breadcrumbs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; font-size: .85rem; color: var(--muted); overflow-wrap: anywhere; }
 .article-breadcrumbs a { color: var(--mint); }
@@ -46,5 +44,4 @@
   .article-pagination { grid-template-columns: minmax(0, 1fr); }
   .article-pagination > span { display: none; }
   .article-next { text-align: left; }
-  .series-pagination { font-size: .78rem; gap: 8px; }
 }

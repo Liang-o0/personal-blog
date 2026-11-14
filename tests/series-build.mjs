@@ -52,11 +52,27 @@ try {
   await build();
   const first = await readPage(`posts/series/${topic}`);
   const second = await readPage(`posts/series/${topic}/page/2`);
-  assert.deepEqual(articleLinks(first), Array.from({ length: 30 }, (_, i) => `/posts/${articleId(i + 1)}`));
-  assert.deepEqual(articleLinks(second), [`/posts/${articleId(31)}`]);
+  assert.deepEqual(articleLinks(first), Array.from({ length: 10 }, (_, i) => `/posts/${articleId(i + 1)}`));
+  assert.deepEqual(articleLinks(second), Array.from({ length: 10 }, (_, i) => `/posts/${articleId(i + 11)}`));
+  const expected = Array.from({ length: 31 }, (_, i) => `/posts/${articleId(i + 1)}`);
+  for (const size of [10, 20, 50, 100]) {
+    const collected = [];
+    const pageCount = Math.ceil(31 / size);
+    for (let page = 1; page <= pageCount; page++) {
+      const route = size === 10 ? `posts/series/${topic}${page === 1 ? '' : `/page/${page}`}` : `posts/series/${topic}/size/${size}/page/${page}`;
+      const html = await readPage(route);
+      assert.match(html, /aria-label="专题目录分页"/);
+      assert.match(html, /跳转页码/);
+      assert.ok(articleLinks(html).length <= size);
+      collected.push(...articleLinks(html));
+    }
+    assert.deepEqual(collected, expected);
+    const missing = size === 10 ? `posts/series/${topic}/page/${pageCount + 1}` : `posts/series/${topic}/size/${size}/page/${pageCount + 1}`;
+    assert.ok(!existsSync(path.join(output, missing, 'index.html')));
+  }
   assert.match(first, new RegExp(`href="/posts/series/${topic}/page/2" rel="next"`));
   assert.match(second, new RegExp(`href="/posts/series/${topic}" rel="prev"`));
-  for (const missing of [`posts/series/${topic}/page/1`, `posts/series/${topic}/page/3`, `posts/${articleId(32)}`]) {
+  for (const missing of [`posts/series/${topic}/page/1`, `posts/series/${topic}/page/5`, `posts/${articleId(32)}`]) {
     assert.ok(!existsSync(path.join(output, missing, 'index.html')));
   }
   const penultimate = await readPage(`posts/${articleId(30)}`);
@@ -101,7 +117,7 @@ try {
     assert.match(html, /文章正在整理中/);
     assert.doesNotMatch(html, /aria-label="专题目录分页"/);
   }
-  console.log('PASS: generated pages, 30/1 pagination, draft exclusion, cross-page navigation, breadcrumbs, original article and empty series');
+  console.log('PASS: generated pages, all series page sizes, draft exclusion, cross-page navigation, breadcrumbs, original article and empty series');
   if (process.env.CHECK_ARCHIVE_BROWSER === '1') {
     const browserResult = await run(process.execPath, ['tests/series-browser.mjs'], {
       cwd: root, windowsHide: true, maxBuffer: 4 * 1024 * 1024,

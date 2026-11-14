@@ -1,0 +1,23 @@
+---
+import SeriesDirectory from '../../../../../../../components/posts/SeriesDirectory.astro';
+import { getPostIndex, type SeriesPage } from '../../../../../../../lib/posts';
+import { ARCHIVE_PAGE_SIZE, ARCHIVE_PAGE_SIZES } from '../../../../../../../lib/archive-pagination';
+
+export async function getStaticPaths() {
+  const index = await getPostIndex();
+  return index.series.flatMap(series =>
+    ARCHIVE_PAGE_SIZES.filter(size => size !== ARCHIVE_PAGE_SIZE).flatMap(pageSize => {
+      const { pageCount } = index.getSeriesPage(series.id, 1, pageSize);
+      return Array.from({ length: pageCount }, (_, offset) => {
+        const page = offset + 1;
+        return {
+          params: { id: series.id, size: String(pageSize), page: String(page) },
+          props: { directory: index.getSeriesPage(series.id, page, pageSize) },
+        };
+      });
+    })
+  );
+}
+interface Props { directory: SeriesPage }
+---
+<SeriesDirectory directory={Astro.props.directory} />

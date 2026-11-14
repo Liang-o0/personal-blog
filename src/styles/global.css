@@ -63,9 +63,6 @@ main, .footer { position: relative; }
 }
 .eyebrow { color: var(--accent); font: 500 .72rem/1.6 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .15em; }
 .display { font-size: clamp(3.2rem, 8vw, 7.2rem); line-height: 1.12; letter-spacing: -.075em; font-weight: 800; }
-.home-carousel { margin: 18px 0 -22px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items: center; }
-.home-carousel-stage { min-width: 0; }
-.home-carousel-illustration { display: block; width: 320px; height: 320px; object-fit: contain; }
 .muted { color: var(--muted); }
 .home-intro { padding: clamp(72px, 13vw, 150px) 0 110px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 48px; align-items: end; }
 .intro-title { margin: 22px 0 28px; }
@@ -114,8 +111,6 @@ main article h2 { font-weight: 700; }
 
 @keyframes text-arrive { from { opacity: 0; transform: translateY(16px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (max-width: 800px) {
-  .home-carousel { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .home-carousel-illustration { justify-self: end; width: min(320px, 100%); height: auto; aspect-ratio: 1; }
   .home-intro, .manifesto { grid-template-columns: minmax(0, 1fr); }
   .home-intro { padding: 64px 0 72px; gap: 42px; }
   .display { font-size: clamp(2.9rem, 10vw, 4.8rem); }
@@ -125,7 +120,6 @@ main article h2 { font-weight: 700; }
 }
 @media (max-width: 640px) {
   .container { width: min(calc(100% - 24px), 1120px); }
-  .home-carousel { margin: 8px -12px -12px; }
   .post-row { grid-template-columns: 28px minmax(0, 1fr); gap: 10px; padding: 18px 16px; }
   .post-row time { grid-column: 2; }
   .latest-notes .post-row { grid-template-columns: 28px minmax(0, 1fr) auto; align-items: start; }
@@ -137,9 +131,6 @@ main article h2 { font-weight: 700; }
   .footer { flex-direction: column; margin-top: 64px; }
 }
 
-@media (max-width: 767px) {
-  .home-carousel-illustration { display: none; }
-}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }

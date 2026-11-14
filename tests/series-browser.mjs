@@ -31,7 +31,7 @@ server.listen(0, '127.0.0.1');
 await once(server, 'listening');
 const base = `http://127.0.0.1:${server.address().port}`;
 const browser = spawn(process.env.BROWSER_EXECUTABLE ?? 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', [
-  '--headless', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank',
+  '--headless', '--disable-gpu', '--disable-extensions', '--no-first-run', '--no-default-browser-check', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank',
 ], { windowsHide: true, stdio: ['ignore', 'ignore', 'pipe'] });
 let socket;
 let counter = 0;
@@ -84,6 +84,14 @@ try {
       await delay(100);
     }
     throw new Error(`Navigation timed out: ${url}; ${await evaluate('JSON.stringify({url:location.href,state:document.readyState,title:document.title})')}`);
+  }
+  async function hydratePagination() {
+    await evaluate("document.querySelector('.archive-pagination').scrollIntoView({behavior: 'instant'})");
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (await evaluate("!document.querySelector('.archive-pagination').closest('astro-island').hasAttribute('ssr')")) return;
+      await delay(100);
+    }
+    throw new Error(`Pagination did not hydrate: ${JSON.stringify(exceptions)}; ${await evaluate("JSON.stringify({url: location.href, rect: document.querySelector('.archive-pagination').getBoundingClientRect().toJSON(), island: document.querySelector('.archive-pagination').closest('astro-island').outerHTML.slice(0, 1800)})")}`);
   }
   await command('Page.enable');
   await command('Runtime.enable');
@@ -182,11 +190,7 @@ try {
     console.log(`PASS: ${width}px, all 5 routes render without horizontal overflow, expected column count`);
   }
   await navigate('/posts');
-  await evaluate("document.querySelector('.archive-pagination').scrollIntoView({behavior: 'instant'})");
-  for (let attempt = 0; attempt < 100; attempt++) {
-    if (await evaluate("!document.querySelector('astro-island[ssr]')")) break;
-    await delay(100);
-  }
+  await hydratePagination();
   assert.ok(await evaluate("document.querySelector('.ant-pagination') && !document.querySelector('astro-island[ssr]')"));
   assert.equal(await evaluate("getComputedStyle(document.querySelector('.archive-pagination select')).backgroundColor"), 'rgb(24, 43, 44)');
   if (await evaluate("!!document.querySelector('.ant-pagination-item-2 a')")) {
@@ -197,6 +201,7 @@ try {
     assert.ok(await evaluate("document.querySelectorAll('.post-row').length > 0 && document.querySelectorAll('.post-row').length <= 10"));
     assert.equal(await evaluate("document.querySelector('.post-row .eyebrow').textContent.trim()"), '11');
     assert.equal(await evaluate("getComputedStyle(document.querySelector('.archive-pagination__jump input')).backgroundColor"), 'rgb(24, 43, 44)');
+    await hydratePagination();
     await evaluate("document.querySelector('.archive-pagination__jump input').focus()");
     await command('Input.insertText', { text: '1' });
     await command('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
@@ -225,6 +230,115 @@ try {
     assert.equal(await evaluate('location.pathname'), '/posts/size/20/page/2');
     assert.equal(await evaluate("document.querySelector('.post-row .eyebrow').textContent.trim()"), '21');
   }
+  for (const topic of ['365-thought-experiments', 'island-economics', 'rich-dad-poor-dad']) {
+    const directory = `/posts/series/${topic}`;
+    await navigate(directory);
+    await hydratePagination();
+    assert.equal(await evaluate("document.querySelector('.archive-pagination').getAttribute('aria-label')"), '专题目录分页');
+    if (await evaluate("!!document.querySelector('.ant-pagination-item-2 a')")) {
+      await evaluate("document.querySelector('.ant-pagination-item-2 a').click()");
+      await delay(1000);
+      assert.equal(await evaluate('location.pathname'), `${directory}/page/2`);
+      assert.equal(await evaluate("document.querySelector('.post-row .eyebrow').textContent.trim()"), '11');
+      await hydratePagination();
+      await evaluate("document.querySelector('.archive-pagination__jump input').focus()");
+      await command('Input.insertText', { text: '1' });
+      await command('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+      await command('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+      await delay(1000);
+      assert.equal(await evaluate('location.pathname'), directory);
+    }
+    for (const size of [20, 50, 100, 10]) {
+      await hydratePagination();
+      await evaluate(`(() => { const select = document.querySelector('.archive-pagination select'); select.value = '${size}'; select.dispatchEvent(new Event('change', { bubbles: true })); })()`);
+      await delay(1000);
+      assert.equal(await evaluate('location.pathname'), size === 10 ? directory : `${directory}/size/${size}/page/1`);
+      assert.equal(await evaluate("document.querySelector('.archive-pagination select').value"), String(size));
+    }
+  }
+  console.log('PASS: all three series share pagination, page links and quick jump stay in series, all page sizes work');
+  async function waitForSearch() {
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (await evaluate("document.querySelector('.series-search-toggle')?.disabled === false")) return;
+      await delay(100);
+    }
+    throw new Error('Series search did not hydrate');
+  }
+  async function searchInput(selector, value) {
+    await evaluate(`(() => { const input = document.querySelector(${JSON.stringify(selector)}); input.value = ${JSON.stringify(value)}; input.dispatchEvent(new Event('input', { bubbles: true })); })()`);
+    await delay(100);
+  }
+  for (const topic of ['365-thought-experiments', 'island-economics', 'rich-dad-poor-dad']) {
+    await navigate(`/posts/series/${topic}`);
+    await waitForSearch();
+    assert.equal(await evaluate("document.querySelector('.series-search-toggle').textContent.trim()"), '');
+    assert.equal(await evaluate("document.querySelector('.series-search-panel').getBoundingClientRect().height"), 0);
+    await evaluate("document.querySelector('.series-search-toggle').click()");
+    await delay(300);
+    assert.equal(await evaluate("document.activeElement.type"), 'search');
+    assert.ok(await evaluate("document.querySelector('.series-search-panel').getBoundingClientRect().height > 100"));
+    const title = await evaluate("document.querySelector('.post-row h2').textContent");
+    await searchInput('input[type=search]', title);
+    assert.ok(await evaluate("Number(document.querySelector('.series-search-status strong').textContent) > 0"));
+    await evaluate("document.querySelector('.series-search-toggle').click()");
+    await delay(300);
+    assert.equal(await evaluate("document.querySelector('.series-search-panel').getBoundingClientRect().height"), 0);
+    assert.equal(await evaluate("document.querySelector('input[type=search]').value"), title);
+    await evaluate("document.querySelector('.series-search-toggle').click()");
+    await delay(300);
+    await searchInput('input[type=search]', '无匹配-unique-search-999');
+    assert.equal(await evaluate("document.querySelector('.series-search-status strong').textContent"), '0');
+    assert.equal(await evaluate("document.querySelectorAll('.archive-pagination').length"), 0);
+    await evaluate("document.querySelector('.series-search-clear').click()");
+    assert.equal(await evaluate("document.querySelector('input[type=search]').value"), '');
+    assert.equal(await evaluate('location.search'), '');
+  }
+  await navigate('/posts/series/365-thought-experiments');
+  await waitForSearch();
+  await evaluate("document.querySelector('.series-search-toggle').click()");
+  await delay(300);
+  await searchInput('input[type=search]', '思想实验');
+  assert.equal(await evaluate("document.querySelector('.series-search-status strong').textContent"), '12');
+  await evaluate("document.querySelector('.ant-pagination-item-2 a').click()");
+  await delay(300);
+  assert.equal(await evaluate("new URLSearchParams(location.search).get('page')"), '2');
+  assert.equal(await evaluate("document.querySelector('.post-row .eyebrow').textContent"), '11');
+  const searchLocation = await evaluate('location.href');
+  await command('Page.reload');
+  await delay(700);
+  await waitForSearch();
+  assert.equal(await evaluate('location.href'), searchLocation);
+  assert.equal(await evaluate("document.querySelector('input[type=search]').value"), '思想实验');
+  assert.equal(await evaluate("document.querySelector('.post-row .eyebrow').textContent"), '11');
+  await searchInput('input[type=date]', '2026-05-29');
+  assert.equal(await evaluate("document.querySelector('.series-search-status strong').textContent"), '1', 'A single start date searches that day');
+  await searchInput('label:nth-child(3) input[type=date]', '2026-05-29');
+  assert.equal(await evaluate("new URLSearchParams(location.search).get('page')"), '1');
+  assert.equal(await evaluate("document.querySelector('.series-search-status strong').textContent"), '1');
+  await searchInput('input[type=date]', '');
+  assert.equal(await evaluate("document.querySelector('.series-search-status strong').textContent"), '1', 'A single end date searches that day');
+  await evaluate("document.querySelector('.series-search-actions button').click()");
+  await searchInput('input[type=search]', '思想实验');
+  await evaluate("const size = document.querySelector('.archive-pagination select'); size.value = '20'; size.dispatchEvent(new Event('change', { bubbles: true }))");
+  await delay(200);
+  assert.equal(await evaluate("document.querySelectorAll('.post-row').length"), 12);
+  assert.equal(await evaluate("new URLSearchParams(location.search).get('q')"), '思想实验');
+  for (const width of [1440, 390, 320]) {
+    await command('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: width < 500 });
+    await delay(300);
+    assert.ok(await evaluate('document.documentElement.scrollWidth <= innerWidth'), `Search overflow at ${width}`);
+    if (width === 1440) {
+      await evaluate("document.querySelector('.series-tools').scrollIntoView({behavior: 'instant', block: 'center'})");
+      const { data } = await command('Page.captureScreenshot', { format: 'png' });
+      await writeFile(path.join(screenshots, 'series-search-desktop.png'), Buffer.from(data, 'base64'));
+    }
+  }
+  assert.equal(await evaluate("getComputedStyle(document.querySelector('.series-search-panel')).transitionDuration"), '0s');
+  await command('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+  assert.ok((await evaluate("getComputedStyle(document.querySelector('.series-search-panel')).transitionDuration")).includes('0.25s'));
+  assert.equal(await evaluate("getComputedStyle(document.querySelector('.series-search-toggle')).color"), 'rgb(255, 255, 255)');
+  await command('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+  console.log('PASS: icon-only search in all series, open/focus/collapse/clear, no results, date boundaries, preserved filters across pagination and reload, responsive search and reduced motion');
   await navigate('/');
   assert.equal(await evaluate("document.querySelectorAll('.latest-notes .post-row').length"), 5);
   console.log('PASS: 20/page selection, persisted URL, numbering, visible quick jumper, latest 5 homepage posts');

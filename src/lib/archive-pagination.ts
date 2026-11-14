@@ -1,9 +1,12 @@
 export const ARCHIVE_PAGE_SIZE = 10;
 export const ARCHIVE_PAGE_SIZES = [10, 20, 50, 100] as const;
 
-export function archiveUrl(page: number, pageSize = ARCHIVE_PAGE_SIZE) {
-  if (pageSize !== ARCHIVE_PAGE_SIZE) return `/posts/size/${pageSize}/page/${page}#all-posts`;
-  return page === 1 ? '/posts#all-posts' : `/posts/page/${page}#all-posts`;
+export interface PaginationTarget { basePath: string; anchor?: string }
+
+export function archiveUrl(page: number, pageSize = ARCHIVE_PAGE_SIZE, target: PaginationTarget = { basePath: '/posts', anchor: 'all-posts' }) {
+  const suffix = target.anchor ? `#${target.anchor}` : '';
+  if (pageSize !== ARCHIVE_PAGE_SIZE) return `${target.basePath}/size/${pageSize}/page/${page}${suffix}`;
+  return `${target.basePath}${page === 1 ? '' : `/page/${page}`}${suffix}`;
 }
 
 export function paginateArchive<T>(posts: T[], page = 1, pageSize = ARCHIVE_PAGE_SIZE) {

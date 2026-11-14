@@ -1,7 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ThreeDCarousel from '../components/ui/ThreeDCarousel.vue';
-import { personalPhotos } from '../data/personalPhotos';
 import { getPostIndex } from '../lib/posts';
 import '../styles/post-reveal.css';
 
@@ -9,13 +7,6 @@ const posts = (await getPostIndex()).posts.slice(0, 5);
 ---
 
 <BaseLayout title="首页">
-  <section class="home-carousel" aria-label="个人照片">
-    <div class="home-carousel-stage">
-      <ThreeDCarousel client:visible images={personalPhotos} autoplay={true} autoplaySpeed={0.15} />
-    </div>
-    <img class="home-carousel-illustration" src="/illustrations/sleepingcat.png" alt="熟睡的小猫插画" width="640" height="640" />
-  </section>
-
   <section class="home-intro">
     <div>
       <p class="eyebrow">Software engineering student</p>

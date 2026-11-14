@@ -1,3 +1,5 @@
+import { ARCHIVE_PAGE_SIZE, archiveUrl, paginateArchive } from './archive-pagination.ts';
+
 /** Pure content rules, independent of Astro loading and page rendering. */
 export interface PostRecord {
   id: string;
@@ -14,12 +16,12 @@ export interface SeriesRecord {
   data: { order: number };
 }
 
-export const SERIES_PAGE_SIZE = 30;
+export const SERIES_PAGE_SIZE = ARCHIVE_PAGE_SIZE;
 const byId = (a: { id: string }, b: { id: string }) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 
-export function seriesUrl(id: string, page = 1) {
+export function seriesUrl(id: string, page = 1, pageSize = SERIES_PAGE_SIZE) {
   const base = `/posts/series/${encodeURIComponent(id)}`;
-  return page === 1 ? base : `${base}/page/${page}`;
+  return archiveUrl(page, pageSize, { basePath: base });
 }
 
 export function postUrl(id: string) {
@@ -69,18 +71,11 @@ export function createPostIndex<P extends PostRecord, S extends SeriesRecord>(al
     return [...group];
   }
 
-  function getSeriesPage(id: string, page = 1) {
+  function getSeriesPage(id: string, page = 1, pageSize = SERIES_PAGE_SIZE) {
     const entries = getSeriesPosts(id);
-    const pageCount = Math.max(1, Math.ceil(entries.length / SERIES_PAGE_SIZE));
-    if (!Number.isInteger(page) || page < 1 || page > pageCount) {
-      throw new Error(`专题 "${id}" 不存在第 ${page} 页`);
-    }
     return {
       series: seriesById.get(id)!,
-      posts: entries.slice((page - 1) * SERIES_PAGE_SIZE, page * SERIES_PAGE_SIZE),
-      total: entries.length,
-      page,
-      pageCount,
+      ...paginateArchive(entries, page, pageSize),
     };
   }
 

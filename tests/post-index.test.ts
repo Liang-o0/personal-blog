@@ -14,14 +14,19 @@ test('31 entries paginate without losing order; drafts do not count', () => {
   const index = createPostIndex([...entries, post('draft', 32, true)], series);
   const first = index.getSeriesPage('a');
   const second = index.getSeriesPage('a', 2);
-  assert.equal(first.posts.length, 30);
+  assert.equal(first.posts.length, 10);
   assert.equal(first.total, 31);
-  assert.equal(first.pageCount, 2);
-  assert.deepEqual(second.posts.map(p => p.id), ['p-31']);
+  assert.equal(first.pageCount, 4);
+  assert.deepEqual(second.posts.map(p => p.id), Array.from({ length: 10 }, (_, i) => `p-${i + 11}`));
+  assert.deepEqual(index.getSeriesPage('a', 4).posts.map(p => p.id), ['p-31']);
+  assert.equal(index.getSeriesPage('a', 2, 20).posts[0].id, 'p-21');
+  assert.equal(index.getSeriesPage('a', 1, 50).posts.length, 31);
+  assert.equal(index.getSeriesPage('a', 1, 100).posts.length, 31);
+  assert.throws(() => index.getSeriesPage('a', 1, 30));
   assert.equal(index.getAdjacentPosts(entries[1]).next?.id, 'p-31');
   assert.equal(index.getAdjacentPosts(entries[0]).previous?.id, 'p-30');
   assert.equal(index.getAdjacentPosts(entries[0]).next, undefined);
-  assert.throws(() => index.getSeriesPage('a', 3), /不存在第 3 页/);
+  assert.throws(() => index.getSeriesPage('a', 5), /第 5 页/);
 });
 
 test('series navigation skips drafts and gaps and never enters another series', () => {
@@ -59,4 +64,6 @@ test('ties are stable, independent navigation retains global date order, and inp
   assert.equal(index.getAdjacentPosts(entries[0]).previous, undefined);
   assert.equal(seriesUrl('a'), '/posts/series/a');
   assert.equal(seriesUrl('a', 2), '/posts/series/a/page/2');
+  assert.equal(seriesUrl('a', 2, 20), '/posts/series/a/size/20/page/2');
+  assert.equal(seriesUrl('b', 1, 100), '/posts/series/b/size/100/page/1');
 });
